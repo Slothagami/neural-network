@@ -1,6 +1,6 @@
-import matplotlib.pyplot as plt
 import numpy as np
 from activations import sigmoid, heaviside
+from visualize import show_output_space
 
 class Perceptron:
     def __init__(self, /, lr=.1, activation=heaviside):
@@ -38,13 +38,4 @@ if __name__ == "__main__":
 
     print(f"\nFinal Weights:\n{nn.weights}")
 
-    # Image of predictions for all values
-    image_size = 100
-    image = np.zeros((image_size, image_size))
-    for x in range(image_size):
-        for y in range(image_size):
-            image[x, y] = nn.predict([x / image_size, y / image_size])
-
-    plt.imshow(image, "Greys")
-    plt.show()
-    
+    show_output_space(nn)
