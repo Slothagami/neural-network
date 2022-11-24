@@ -1,4 +1,5 @@
 import numpy as np
+from activations import sigmoid, sigmoid_prime
 
 # based on towardsdatascience.com/math-neural-network-from-scratch-in-python-d6da9f29ce65
 class Layer:
@@ -10,7 +11,7 @@ class FCLayer(Layer):
     def __init__(self, in_size, out_size):
         super().__init__()
         self.weights = np.random.rand(in_size, out_size) - .5
-        self.bias    = np.random.rand(out_size) - .5
+        self.bias    = np.random.rand(1, out_size) - .5
 
     def forward(self, input):
         self.input = input 
@@ -29,7 +30,7 @@ class FCLayer(Layer):
         return in_error
 
 class ActivationLayer(Layer):
-    def __init__(self, func, derivative):
+    def __init__(self, func=sigmoid, derivative=sigmoid_prime):
         super().__init__()
         self.func = func
         self.derivative = derivative

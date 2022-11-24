@@ -1,7 +1,10 @@
+from activations import MSE, MSE_prime
+
 class Network:
-    def __init__(self, /, loss, loss_prime, lr=.1):
+    def __init__(self, /, loss=MSE, loss_prime=MSE_prime, lr=.1):
         self.layers = []
 
+        self.lr = lr
         self.loss = loss
         self.loss_prime = loss_prime
 
@@ -41,4 +44,5 @@ class Network:
             # Calc Average Error
             error /= len(samples)
 
-            print(f"Epoch: {epoch}, Error: {disp_error}")
+            if epoch % 100 == 0:
+                print(f"Epoch: {epoch}, Error: {disp_error}")
