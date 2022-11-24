@@ -1,4 +1,5 @@
 from activations import MSE, MSE_prime
+from layers import *
 
 class Network:
     def __init__(self, /, loss=MSE, loss_prime=MSE_prime, lr=.1):
@@ -9,6 +10,11 @@ class Network:
         self.loss_prime = loss_prime
 
     def add(self, layer): self.layers.append(layer)
+
+    def config(self, layers, activation, activation_prime):
+        for i, layer in enumerate(layers[1:]):
+            self.add(FCLayer(layers[i], layer))
+            self.add(ActivationLayer(activation, activation_prime))
 
     def predict(self, samples):
         # Predict a Batch of samples

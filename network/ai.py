@@ -19,10 +19,7 @@ labels = np.array([
 
 nn = Network(lr=.1)
 
-nn.add(FCLayer(2, 3))
-nn.add(ActivationLayer(func=tanh, derivative=tanh_prime))
-nn.add(FCLayer(3, 1))
-nn.add(ActivationLayer(func=tanh, derivative=tanh_prime))
-
+nn.config((2, 3, 1), tanh, tanh_prime)
 nn.train(batches, labels, 1000)
+
 print(nn.predict(batches))
