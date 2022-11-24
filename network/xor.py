@@ -1,4 +1,3 @@
-from layers          import FCLayer, ActivationLayer
 from neuralnetwork   import Network 
 from activations     import *
 

@@ -12,8 +12,8 @@ class Network:
     def add(self, layer): self.layers.append(layer)
 
     def config(self, layers, activation, activation_prime):
-        for i, layer in enumerate(layers[1:]):
-            self.add(FCLayer(layers[i], layer))
+        for i in range(1, len(layers)):
+            self.add(FCLayer(layers[i-1], layers[i]))
             self.add(ActivationLayer(activation, activation_prime))
 
     def predict(self, samples):
@@ -50,5 +50,4 @@ class Network:
             # Calc Average Error
             disp_error /= len(samples)
 
-            if epoch % 100 == 0:
-                print(f"Epoch: {epoch}, Error: {disp_error}")
+            print(f"Epoch: {epoch}, Error: {disp_error}")
