@@ -1,7 +1,6 @@
 import numpy as np
 from activations import sigmoid, sigmoid_prime
 
-# based on towardsdatascience.com/math-neural-network-from-scratch-in-python-d6da9f29ce65
 class Layer:
     def __init__(self): self.input = self.output = None 
     def forward():  raise NotImplementedError
