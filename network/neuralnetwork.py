@@ -42,7 +42,7 @@ class Network:
                     error = layer.backprop(error, self.lr)
 
             # Calc Average Error
-            error /= len(samples)
+            disp_error /= len(samples)
 
             if epoch % 100 == 0:
                 print(f"Epoch: {epoch}, Error: {disp_error}")

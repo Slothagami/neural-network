@@ -16,10 +16,10 @@ def tanh_prime(x):
 
 
 
-def MSE(prediction, target):
+def MSE(target, prediction):
     return np.mean(np.square(target - prediction))
 
-def MSE_prime(prediction, target):
+def MSE_prime(target, prediction):
     return 2 * (prediction - target) / target.size
 
 
