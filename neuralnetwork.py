@@ -11,11 +11,13 @@ class NeuralNetwork:
 
         self.activations = []
         self.weights = []
-        self.biases  = np.random.rand(len(layers))
+        self.biases  = []
 
         for i, layer in enumerate(layers[:-1]):
             self.weights.append( # +1 to account for bias node
                 np.random.rand(layer, layers[i + 1]) )
+
+            self.biases.append( np.random.rand(layers[i + 1]) )
 
     def predict(self, input):
         self.activations = []
@@ -36,23 +38,27 @@ class NeuralNetwork:
 
         # Error Prime
         error_prime = 2 * (out - target)
+        delta = error_prime * self.activation_prime(self.activations[-1])
 
-        for weight, activation, bias in zip(
+        for i, data in enumerate(zip(
             reversed(self.weights), 
-            reversed(self.activations),
             reversed(self.biases)
-        ):
-            weight -= error_prime * self.lr
-            bias   -= error_prime * self.lr
-            error_prime = np.dot((self.activation_prime(activation) * activation).T, error_prime)
+        )):
+            weight, bias = data
+            # error_prime = 2 * (activation - error_prime)
+            delta = np.dot(self.weights[-i+1], delta) * self.lr
+
+            self.weights[-i] -= delta #error_prime * self.lr
+            self.biases[-i]  -= np.dot(delta, self.activations[-i]) #error_prime * self.lr
+            # error_prime = np.dot((self.activation_prime(activation) * activation).T, error_prime)
 
         print(f"Error: {error:.4f} → {target}? → {out}")
 
 
 if __name__ == "__main__":
-    nn = NeuralNetwork((2, 1), learn_rate=.1)
-    for n in range(10_000_000):
-        if n % 500_000 == 0:
+    nn = NeuralNetwork((2, 3, 1), learn_rate=.6)
+    for n in range(100_000_000):
+        if n % 5_000_000 == 0:
             nn.feed([1, 1], 1)
             nn.feed([1, 0], 1)
             nn.feed([0, 1], 1)
