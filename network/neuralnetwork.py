@@ -51,4 +51,4 @@ class Network:
             # Calc Average Error
             disp_error /= len(samples)
 
-            print(f"Epoch: {epoch}, Error: {disp_error}")
+            print(f"Epoch: {epoch + 1}, Error: {disp_error}")
