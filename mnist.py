@@ -1,6 +1,5 @@
-from neuralnetwork  import Network 
-from activations    import *
-from layers         import FCLayer
+from network.neuralnetwork  import Network 
+from network.activations    import *
 
 from keras.datasets import mnist
 from keras.utils import np_utils

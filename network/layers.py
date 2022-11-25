@@ -1,5 +1,5 @@
+from network.activations import sigmoid, sigmoid_prime
 import numpy as np
-from activations import sigmoid, sigmoid_prime
 
 class Layer:
     def __init__(self): self.input = self.output = None 

@@ -1,5 +1,5 @@
-from activations import MSE, MSE_prime
-from layers import *
+from network.activations import MSE, MSE_prime
+from network.layers import *
 
 class Network:
     def __init__(self, /, loss=MSE, loss_prime=MSE_prime, lr=.1):
