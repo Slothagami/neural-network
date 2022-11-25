@@ -11,9 +11,10 @@ class Network:
 
     def add(self, layer): self.layers.append(layer)
 
-    def config(self, layer_sizes, layer_types, activation, activation_prime):
+    def config(self, layer_sizes, activation, activation_prime, /, layertypes=None):
         for i in range(1, len(layer_sizes)):
-            self.add(layer_types[i-1](layer_sizes[i-1], layer_sizes[i]))
+            layertype = layertypes[i-1] if layertypes is not None else FCLayer
+            self.add(layertype(layer_sizes[i-1], layer_sizes[i]))
             self.add(ActivationLayer(activation, activation_prime))
 
     def predict(self, samples):

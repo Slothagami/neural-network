@@ -24,7 +24,6 @@ test_labels  = np_utils.to_categorical(test_labels )
 nn = Network(lr=.1)
 nn.config(
     (28*28, 100, 50, 10), 
-    (FCLayer, FCLayer, FCLayer), 
     tanh, tanh_prime
 )
 nn.train(test_batch, test_labels, 10)
@@ -33,7 +32,7 @@ nn.train(test_batch, test_labels, 10)
 # Print Results
 print("\nRaw Output:")
 for sample in nn.predict(test_batch[:3]): 
-    print(sample)
+    print(sample[0])
 
 print("\nRounded Output:")
 for sample in nn.predict(test_batch[:3]): 
