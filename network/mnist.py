@@ -1,5 +1,6 @@
-from neuralnetwork   import Network 
-from activations     import *
+from neuralnetwork  import Network 
+from activations    import *
+from layers         import FCLayer
 
 from keras.datasets import mnist
 from keras.utils import np_utils
@@ -21,7 +22,11 @@ test_labels  = np_utils.to_categorical(test_labels )
 
 # Train
 nn = Network(lr=.1)
-nn.config((28*28, 100, 50, 10), tanh, tanh_prime)
+nn.config(
+    (28*28, 100, 50, 10), 
+    (FCLayer, FCLayer, FCLayer), 
+    tanh, tanh_prime
+)
 nn.train(test_batch, test_labels, 10)
 
 
@@ -32,7 +37,7 @@ for sample in nn.predict(test_batch[:3]):
 
 print("\nRounded Output:")
 for sample in nn.predict(test_batch[:3]): 
-    print(np.abs(np.round(sample)))
+    print(np.abs(np.round(sample))[0])
 
 print("\nLabels:")
 for label in test_labels[:3]: 
