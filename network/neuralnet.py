@@ -1,7 +1,7 @@
 from network.activations import NNFunction, MSE, Sigmoid
 import numpy as np
 
-class NeuralNetwork:
+class NeuralNet:
     def __init__(self, /, loss: NNFunction = MSE, lr=.1):
         self.layers = []
 

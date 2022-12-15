@@ -1,6 +1,6 @@
-from network.neuralnetwork import * 
+from network.neuralnet import * 
 
 class ConvNet:
-    def __init__(self, generator: NeuralNetwork, discriminator: NeuralNetwork):
+    def __init__(self, generator: NeuralNet, discriminator: NeuralNet):
         self.generator = generator
         self.discriminator = discriminator

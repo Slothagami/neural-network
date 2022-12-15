@@ -1,5 +1,5 @@
-from network.neuralnetwork  import NeuralNetwork 
-from network.activations    import *
+from network.neuralnet import NeuralNet 
+from network.activations import *
 
 from keras.datasets import mnist
 from keras.utils import np_utils
@@ -20,7 +20,7 @@ test_labels  = np_utils.to_categorical(test_labels )
 
 
 # Train
-nn = NeuralNetwork(lr=.1)
+nn = NeuralNet(lr=.1)
 nn.config((28*28, 100, 50, 10), Tanh)
 nn.train(test_batch, test_labels, 25)
 

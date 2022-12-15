@@ -1,6 +1,6 @@
-from network.neuralnetwork  import NeuralNetwork 
-from network.visualize      import show_output_space
-from network.activations    import *
+from network.neuralnet   import NeuralNet 
+from network.visualize   import show_output_space
+from network.activations import *
 
 import numpy as np
 
@@ -17,7 +17,7 @@ labels = np.array([
     [[0]],
 ])
 
-nn = NeuralNetwork(lr=.1)
+nn = NeuralNet(lr=.1)
 
 nn.config((2, 3, 1), Tanh)
 nn.train(batches, labels, 500)
