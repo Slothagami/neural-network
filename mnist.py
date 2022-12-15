@@ -25,15 +25,16 @@ nn.config(
     (28*28, 100, 50, 10), 
     tanh, tanh_prime
 )
-nn.train(test_batch, test_labels, 5)
+nn.train(test_batch, test_labels, 35)
+
 
 # Evaluate Accuracy
 correct = 0
-nsamples = 1000
+nsamples = 2000
 for sample, label in zip(nn.predict(test_batch[:nsamples]), test_labels[:nsamples]): 
     prediction = np.abs(np.round(sample))[0]
     if np.array_equal(label, prediction):
         correct += 1 
 
 accuracy = correct / nsamples * 100
-print(f"\nAcuracy: {accuracy:.2f}%")
+print(f"\nAcuracy: {accuracy:.2f}% ({correct}/{nsamples})")
