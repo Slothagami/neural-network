@@ -1,4 +1,4 @@
-from network.activations import sigmoid, sigmoid_prime
+from network.activations import Sigmoid, NNFunction
 import numpy as np
 
 class Layer:
@@ -29,15 +29,14 @@ class FCLayer(Layer):
         return in_error
 
 class ActivationLayer(Layer):
-    def __init__(self, func=sigmoid, derivative=sigmoid_prime):
+    def __init__(self, activation: NNFunction = Sigmoid):
         super().__init__()
-        self.func = func
-        self.derivative = derivative
+        self.activation = activation
 
     def forward(self, input):
         self.input = input
-        self.output = self.func(input)
+        self.output = self.activation.function(input)
         return self.output
 
     def backprop(self, out_error, lr):
-        return self.derivative(self.input) * out_error
+        return self.activation.derivative(self.input) * out_error

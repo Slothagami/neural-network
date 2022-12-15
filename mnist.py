@@ -15,17 +15,14 @@ test_batch  = test_batch .reshape(test_batch .shape[0], 1, 28*28).astype("float3
 train_batch /= 255 # normalize pixel values
 test_batch  /= 255
 
-train_labels = np_utils.to_categorical(train_labels) # reformat into vector labels
+train_labels = np_utils.to_categorical(train_labels) # reformat to vector labels
 test_labels  = np_utils.to_categorical(test_labels )
 
 
 # Train
 nn = Network(lr=.1)
-nn.config(
-    (28*28, 100, 50, 10), 
-    tanh, tanh_prime
-)
-nn.train(test_batch, test_labels, 35)
+nn.config((28*28, 100, 50, 10), Tanh)
+nn.train(test_batch, test_labels, 25)
 
 
 # Evaluate Accuracy
