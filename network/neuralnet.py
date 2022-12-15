@@ -1,4 +1,4 @@
-from network.activations import NNFunction, MSE, Sigmoid
+from network.activations import *
 import numpy as np
 
 class NeuralNet:
@@ -10,7 +10,7 @@ class NeuralNet:
 
     def add(self, layer): self.layers.append(layer)
 
-    def config(self, layer_sizes, activation: NNFunction, /, layertypes=None):
+    def config(self, layer_sizes, activation: NNFunction = Tanh, /, layertypes=None):
         for i in range(1, len(layer_sizes)):
             layertype = layertypes[i-1] if layertypes is not None else FCLayer
             self.add(layertype(layer_sizes[i-1], layer_sizes[i]))
