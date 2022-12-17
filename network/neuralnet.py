@@ -1,4 +1,5 @@
 from network.activations import *
+from scipy import signal
 import numpy as np
 
 class NeuralNet:
@@ -93,3 +94,55 @@ class ActivationLayer(Layer):
 
     def backprop(self, out_error, lr):
         return self.activation.derivative(self.input) * out_error
+
+class ConvLayer(Layer):
+    def __init__(self, in_shape, kernel_size, depth):
+        in_depth, in_height, in_width = in_shape
+        self.in_shape  = in_shape
+        self.depth     = depth
+        self.in_depth = in_depth
+
+        self.out_shape = (
+            depth,
+            in_height - kernel_size + 1,
+            in_width  - kernel_size + 1
+        )
+        self.kernels_shape = (depth, in_depth, kernel_size, kernel_size)
+
+        self.kernels = np.random.randn(*self.kernels_shape)
+        self.biases  = np.random.randn(*self.out_shape)
+
+    def forward(self, input):
+        self.input = input
+        self.output = np.copy(self.biases) # Equal to adding them
+
+        for depth in range(self.depth):
+            for in_depth in range(self.in_depth):
+                self.output[depth] += signal.correlate2d(
+                    self.input[in_depth], 
+                    self.kernels[depth, in_depth], 
+                    "valid"
+                )
+
+        return self.output
+
+    def backprop(self, out_gradient, lr):
+        kernel_delta = np.zeros(self.kernels_shape)
+        input_delta  = np.zeros(self.in_shape)
+
+        for depth in range(self.depth):
+            for in_depth in range(self.in_depth):
+                kernel_delta[depth, in_depth] = signal.correlate2d(
+                    self.input[in_depth], 
+                    out_gradient[depth], 
+                    "valid"
+                )
+                input_delta[in_depth] = signal.convolve2d(
+                    out_gradient[depth],
+                    self.kernels[depth, in_depth], 
+                    "full"
+                )
+
+                self.kernels -= lr * kernel_delta
+                self.biases  -= lr * out_gradient
+                return input_delta

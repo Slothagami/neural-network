@@ -1,5 +1,6 @@
 import numpy as np
 
+# Activation Functions #
 class NNFunction:
     def function(x):   raise NotImplementedError
     def derivative(x): raise NotImplementedError
@@ -12,6 +13,8 @@ class Tanh(NNFunction):
     def function(x):   return np.tanh(x)
     def derivative(x): return 1 - np.tanh(x) ** 2
 
+
+# Loss Functions #
 class MSE(NNFunction):
     def function(target, prediction):   return np.mean(np.square(target - prediction))
     def derivative(target, prediction): return 2 * (prediction - target) / target.size
