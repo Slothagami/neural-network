@@ -146,3 +146,14 @@ class ConvLayer(Layer):
                 self.kernels -= lr * kernel_delta
                 self.biases  -= lr * out_gradient
                 return input_delta
+
+class ReshapeLayer(Layer):
+    def __init__(self, in_shape, out_shape):
+        self.in_shape = in_shape
+        self.out_shape = out_shape
+
+    def forward(self, input):
+        return np.reshape(input, self.out_shape)
+
+    def backprop(self, out_gradient, lr):
+        return np.reshape(out_gradient, self.in_shape)
