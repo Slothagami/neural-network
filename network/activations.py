@@ -13,6 +13,9 @@ class Tanh(NNFunction):
     def function(x):   return np.tanh(x)
     def derivative(x): return 1 - np.tanh(x) ** 2
 
+class ReLU(NNFunction):
+    def function(x):   return np.maximum(0, x)
+    def derivative(x): return (x >= 0).astype(int) # 1 iff x >= 0
 
 # Loss Functions #
 class MSE(NNFunction):
