@@ -1,5 +1,6 @@
 from network.activations import *
 from scipy import signal
+from skimage.measure import block_reduce
 import numpy as np
 
 class NeuralNet:
@@ -95,6 +96,20 @@ class ActivationLayer(Layer):
     def backprop(self, out_error, lr):
         return self.activation.derivative(self.input) * out_error
 
+class Softmax(Layer):
+    def function(self, target, prediction): 
+        exp = np.exp(prediction)
+        self.output = exp / np.sum(exp)
+        return self.output
+
+    def derivative(self, out_error, lr):
+        out_size = np.size(self.output)
+        tmp = np.tile(self.output, out_size)
+        return np.dot(
+            tmp * (np.identity(out_size) - np.transpose(tmp)),
+            out_error
+        )
+
 class ConvLayer(Layer):
     def __init__(self, in_shape, kernel_size, depth):
         in_depth, in_height, in_width = in_shape
@@ -157,3 +172,23 @@ class ReshapeLayer(Layer):
 
     def backprop(self, out_gradient, lr):
         return np.reshape(out_gradient, self.in_shape)
+
+class PoolLayer(Layer):
+    def __init__(self, block_size, depth, function=np.max):
+        self.block_size = (block_size, block_size)
+        self.function   = function
+        self.depth = depth
+
+        self.input = None 
+        self.output = None
+
+    def forward(self, x):
+        self.input = x
+        self.output = block_reduce(x, self.block_size, self.function)
+        return self.output
+
+    def backprop(self, out_gradient, lr):
+        # The values that were the maximum value have gradients equal to 1, and zero elsewhere
+        # because they had no contribution to the output of the max() function
+        for channel in self.input:
+            delta = np.where(self.input == self.output) # ? something like this?

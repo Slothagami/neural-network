@@ -23,21 +23,23 @@ test_labels  = np_utils.to_categorical(test_labels )
 
 
 # Train
-nn = NeuralNet(lr=.1)
+nn = NeuralNet(lr=.005)
 # nn.config((28*28, 100, 50, 10), Tanh)
 
 # Config Layers of ConvNet
 depth = 3
-nn.add(ConvLayer((1, 28, 28), 3, depth))
+nn.add(ConvLayer((1, 28, 28), 5, depth))
 nn.add(ActivationLayer(ReLU))
 nn.add(ReshapeLayer((depth, 26, 26), (1, depth * 26 * 26)))
+
 nn.add(FCLayer(depth * 26 * 26, 100))
 nn.add(ActivationLayer(ReLU))
+
 nn.add(FCLayer(100, 10))
-nn.add(ActivationLayer(ReLU))
+nn.add(Softmax())
 
 print("Beginning Training...")
-nn.train(train_batch, train_labels, 10)
+nn.train(train_batch, train_labels, 5)
 
 
 # Evaluate Accuracy

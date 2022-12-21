@@ -17,14 +17,6 @@ class ReLU(NNFunction):
     def function(x):   return np.maximum(0, x)
     def derivative(x): return (x >= 0).astype(int) # 1 iff x >= 0
 
-class Softmax(NNFunction):
-    def function(target, prediction): 
-        exp = np.exp(prediction)
-        softmax = exp / np.sum(exp)
-
-    def derivative(x):
-        raise NotImplementedError
-
 # Loss Functions #
 class MSE(NNFunction):
     def function(target, prediction):   return np.mean(np.square(target - prediction))
