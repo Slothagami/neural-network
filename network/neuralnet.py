@@ -97,17 +97,16 @@ class ActivationLayer(Layer):
         return self.activation.derivative(self.input) * out_error
 
 class Softmax(Layer):
-    def function(self, target, prediction): 
-        exp = np.exp(prediction)
+    def forward(self, input): 
+        exp = np.exp(input)
         self.output = exp / np.sum(exp)
         return self.output
 
-    def derivative(self, out_error, lr):
+    def backprop(self, out_error, lr):
         out_size = np.size(self.output)
-        tmp = np.tile(self.output, out_size)
         return np.dot(
-            tmp * (np.identity(out_size) - np.transpose(tmp)),
-            out_error
+            (np.identity(out_size) - self.output.T) * self.output,
+            np.reshape(out_error, (10,)) # shape (1, 10) apparently != (10,)
         )
 
 class ConvLayer(Layer):

@@ -10,10 +10,10 @@ print("Loading Data...")
 (train_batch, train_labels), (test_batch, test_labels) = mnist.load_data()
 
 # Reshape Data
-train_batch = train_batch.reshape(train_batch.shape[0], 1, 28, 28).astype("float32")
-test_batch  = test_batch .reshape(test_batch .shape[0], 1, 28, 28).astype("float32")
-# train_batch = train_batch.reshape(train_batch.shape[0], 1, 28*28).astype("float32")
-# test_batch  = test_batch .reshape(test_batch .shape[0], 1, 28*28).astype("float32")
+# train_batch = train_batch.reshape(train_batch.shape[0], 1, 28, 28).astype("float32")
+# test_batch  = test_batch .reshape(test_batch .shape[0], 1, 28, 28).astype("float32")
+train_batch = train_batch.reshape(train_batch.shape[0], 1, 28*28).astype("float32")
+test_batch  = test_batch .reshape(test_batch .shape[0], 1, 28*28).astype("float32")
 
 train_batch /= 255 # normalize pixel values
 test_batch  /= 255
@@ -23,19 +23,19 @@ test_labels  = np_utils.to_categorical(test_labels )
 
 
 # Train
-nn = NeuralNet(lr=.005)
-# nn.config((28*28, 100, 50, 10), Tanh)
+nn = NeuralNet(lr=.01)
+nn.config((28*28, 100, 50, 10), Tanh)
 
 # Config Layers of ConvNet
-depth = 3
-nn.add(ConvLayer((1, 28, 28), 5, depth))
-nn.add(ActivationLayer(ReLU))
-nn.add(ReshapeLayer((depth, 26, 26), (1, depth * 26 * 26)))
+# depth = 3
+# nn.add(ConvLayer((1, 28, 28), 5, depth))
+# nn.add(ActivationLayer(ReLU))
+# nn.add(ReshapeLayer((depth, 26, 26), (1, depth * 26 * 26)))
 
-nn.add(FCLayer(depth * 26 * 26, 100))
-nn.add(ActivationLayer(ReLU))
+# nn.add(FCLayer(depth * 26 * 26, 100))
+# nn.add(ActivationLayer(ReLU))
 
-nn.add(FCLayer(100, 10))
+# nn.add(FCLayer(100, 10))
 nn.add(Softmax())
 
 print("Beginning Training...")
