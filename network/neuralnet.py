@@ -106,7 +106,8 @@ class Softmax(Layer):
         out_size = np.size(self.output)
         return np.dot(
             (np.identity(out_size) - self.output.T) * self.output,
-            np.reshape(out_error, (10,)) # shape (1, 10) apparently != (10,)
+            # np.reshape(out_error, (10,)) # shape (1, 10) apparently != (10,)
+            out_error # shape (1, 10) apparently != (10,)
         )
 
 class ConvLayer(Layer):

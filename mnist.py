@@ -36,7 +36,7 @@ nn.config((28*28, 100, 50, 10), Tanh)
 # nn.add(ActivationLayer(ReLU))
 
 # nn.add(FCLayer(100, 10))
-nn.add(Softmax())
+# nn.add(Softmax())
 
 print("Beginning Training...")
 nn.train(train_batch, train_labels, 5)
