@@ -20,7 +20,7 @@ var interval = setInterval(() => {
 let btn = document.createElement("button")
 btn.onclick = () => {
     clearInterval(interval)
-    navigator.clipboard.writeText(string)
+    navigator.clipboard.writeText(string.toLowerCase())
     btn.parentElement.removeChild(btn)
 }
 

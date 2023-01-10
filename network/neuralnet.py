@@ -32,6 +32,9 @@ class NeuralNet:
         return results
 
     def train(self, samples, labels, epochs):
+        samples = np.array(samples)
+        labels  = np.array(labels)
+        
         for epoch in range(epochs):
             disp_error = 0 
 
