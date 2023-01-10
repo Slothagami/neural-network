@@ -14,7 +14,7 @@ def audio_frame(timestamp):
     sec += 60 * min # time in seconds
     return sec * fps
 
-def section_times(transcript, sample_rate):
+def section_times(transcript):
     with open(transcript, "r") as file:
         # transform lines to instructions to cut file
         last_cut = 0
@@ -29,9 +29,17 @@ def section_times(transcript, sample_rate):
                     timestamp = False
                     continue
 
-                cut = audio_frame(line)
-                cuts.append(wave[last_cut:cut])
-                last_cut = cut
+                cut_frame = audio_frame(line)
+                cut = wave[last_cut:cut_frame]
+
+                # padd the recording to match the input of the Network
+                clip_length = cut.shape[0]//fps # in seconds
+
+                if clip_length <= sample_duration: # ignore clips too long to input to nn
+                    cut = np.pad(cut, (0, sample_size - cut.shape[0]))
+
+                    cuts.append(cut)
+                last_cut = cut_frame
             else:
                 lines.append(line)
 
@@ -39,25 +47,29 @@ def section_times(transcript, sample_rate):
 
     return cuts, lines
 
-# Cut the audio file into sectoins acording to the transcript
-audio = AudioFileClip("voice/audio/11MM_18E Extrema Problems_downsample.mp3")
+def make_data():
+    global fps, sample_duration, sample_size, cuts, lines, wave
+    print("Creating Training Data...")
+    # Cut the audio file into sectoins acording to the transcript
+    audio = AudioFileClip("voice/audio/11MM_18E Extrema Problems_downsample.mp3")
 
-print("Creating Training Data...")
-downsample = 4
-wave = audio.to_soundarray()[:,0][::downsample]
+    downsample = 4
+    wave = audio.to_soundarray()[:,0][::downsample]
 
-# noise_strength = .05
-# noise = (np.random.rand(*wave.shape) - .5) * 2 * noise_strength
+    # noise_strength = .05
+    # noise = (np.random.rand(*wave.shape) - .5) * 2 * noise_strength
 
-# label_sample = wave 
-# train_sample = (label_sample + noise) / (1 + noise_strength)
+    # label_sample = wave 
+    # train_sample = (label_sample + noise) / (1 + noise_strength)
 
-fps = audio.fps // downsample
-sample_duration = 6 # seconds
-sample_size = fps * sample_duration
+    fps = audio.fps // downsample
+    sample_duration = 10 # seconds
+    sample_size = fps * sample_duration
 
-cuts, lines = section_times("voice/transcripts/11MM_18E Extrema Problems.txt", audio.fps)
-# print(cuts[:4])
-# print(" ".join(lines))
+    cuts, lines = section_times("voice/transcripts/11MM_18E Extrema Problems.txt")
+    return cuts, lines
+    # save_sample(0)
+    # print(np.array(cuts).shape)
 
-save_sample(32)
+
+if __name__ == "__main__": make_data()
