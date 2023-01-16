@@ -7,7 +7,7 @@ in_size = samples[0].shape[1]
 out_size = labels[0].shape[0]
 
 # Train
-nn = NeuralNet(lr=.0001)
+nn = NeuralNet("beaumont.npy", lr=.0001)
 nn.config((in_size, 100, 50, 100, out_size), ReLU)
 
 print("Beginning Training...")

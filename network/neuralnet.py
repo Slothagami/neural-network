@@ -4,8 +4,9 @@ from skimage.measure import block_reduce
 import numpy as np
 
 class NeuralNet:
-    def __init__(self, /, loss: NNFunction = MSE, lr=.1):
+    def __init__(self, file, /, loss: NNFunction = MSE, lr=.1):
         self.layers = []
+        self.file = file
 
         self.lr = lr
         self.loss = loss
@@ -56,6 +57,26 @@ class NeuralNet:
             disp_error /= len(samples)
 
             print(f"Epoch: {epoch + 1}, Error: {disp_error}")
+            self.save(self.file)
+
+    def save(self, filen):
+        weights, biases = [], []
+        for layer in self.layers:
+            if isinstance(layer, FCLayer):
+                weights.append(layer.weights)
+                biases.append(layer.bias)
+
+        np.save(filen, (weights, biases), allow_pickle=True)
+
+    def load(self):
+        weights, biases = np.load(self.file, allow_pickle=True)
+
+        ind = 0
+        for layer in self.layers:
+            if isinstance(layer, FCLayer):
+                layer.weights = weights[ind]
+                layer.bias    = biases[ind]
+                ind += 1
 
 
 # Layers #
