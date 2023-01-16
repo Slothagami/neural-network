@@ -70,7 +70,7 @@ def collect_samples():
     # train_sample = (label_sample + noise) / (1 + noise_strength)
 
     fps = audio.fps // downsample
-    sample_duration = 10 # seconds
+    sample_duration = 5 # seconds
     sample_size = fps * sample_duration
 
     cuts, lines = section_times("voice/transcripts/11MM_18E Extrema Problems.txt")
@@ -109,7 +109,7 @@ def make_data():
     training_samples = []
     for audio, noise, subtitle in zip(samples, noise_ammounts, coded_subtitles):
         input = np.concatenate((audio, [noise], subtitle))
-        training_samples.append( input.reshape(input.shape[0], 1) )
+        training_samples.append( input.reshape(1, input.shape[0]) )
 
     return training_samples, labels
 
