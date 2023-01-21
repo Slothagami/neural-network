@@ -3,6 +3,7 @@ from moviepy.audio.AudioClip import AudioArrayClip
 import numpy as np 
 import matplotlib.pyplot as plt
 
+
 def save_sample(sample,arr):
     c = arr[sample]
     c = c.reshape(c.shape[0], 1)
@@ -92,17 +93,6 @@ def make_data():
     # assemble training data
     labels = np.copy(samples)
 
-    # add noise to input
-    noise_ammounts = np.random.rand(len(samples))
-    noise = np.random.rand(*samples.shape) * noise_ammounts[:, np.newaxis] # multiply each column with the strength of noise
-    samples += noise
-
-    norm = (1 / (1 + noise_ammounts))
-    samples = samples * norm[:, np.newaxis] # normalize input between -1 and 1
-
-    # add noise indicator neuron to the bottom row
-    # samples = np.hstack((noise_ammounts,samples))
-
     # encode subtitles into input (max-length: 45 characters)
     coded_subtitles = encode_subtitles(subitles)
 
@@ -114,6 +104,6 @@ def make_data():
     return training_samples, labels
 
 
-
 if __name__ == "__main__": 
-    data = make_data()
+    audio, subtitles = collect_samples()
+    print(audio.shape, subtitles[:10])

@@ -1,37 +1,30 @@
 from network.neuralnet   import *
 from network.activations import *
-from mimic_dataset import make_data, encode_subtitles
+from network.audio       import *
 
-from moviepy.audio.AudioClip import AudioArrayClip
+from network.diffusion import *
+from mimic_dataset import collect_samples
 
-def save_output_audio(audio, prompt):
-    audio = audio.reshape(audio.shape[1], 1)
-    audio = AudioArrayClip(audio, fps=44100/2)
-    audio.write_audiofile(f"{prompt}.mp3")
+audio, subtitles = collect_samples()
 
-samples, labels = make_data()
-in_size = samples[0].shape[1]
-out_size = labels[0].shape[0]
+# samples, labels = make_data()
+# in_size = samples[0].shape[1]
+# out_size = labels[0].shape[0]
+
+sample_size = audio.shape[1] # audio length in samples
 
 # Train
-nn = NeuralNet("beaumont.npy", lr=.1)
-# nn.config((in_size, 100, 50, 100, out_size), ReLU)
-nn.config((in_size, 150, 80, 80, 150, out_size), Tanh)
-nn.load()
+# nn = NeuralNet("beaumont.npy", lr=.1)
+# # nn.config((in_size, 100, 50, 100, out_size), ReLU)
+# nn.config((sample_size, 150, 80, 80, 150, sample_size), Tanh)
+# # nn.load()
 
 # print("Beginning Training...")
-# for _ in range(10):
-#     nn.train(samples, labels, 4)
-#     samples, labels = make_data() # Randomize the noise in the data
-
-# Test Sample
-noise_size = 11025 * 5
-noise = np.random.rand(noise_size)
-prompt = "welcome back everyone"
-prompt_enc = encode_subtitles([prompt])[0]
-
-input = np.concatenate((noise, [1], prompt_enc))
-
-audio = nn.predict([input])[0]
-print(audio.shape)
-save_output_audio(audio, prompt)
+# n_epochs = 10
+# batch_size = 1
+# for epoch in range(n_epochs):
+#     t = np.random.randint(0, DIFFUSION_STEPS, size=(batch_size,))
+#     audio = np.stack([audio] *  batch_size)
+#     audio, noise = diffuse(audio, t, betas = linear_schedule())
+#     nn.train(audio, noise, 1)
+    
