@@ -4,7 +4,7 @@ from skimage.measure import block_reduce
 import numpy as np
 
 class NeuralNet:
-    def __init__(self, file, /, loss: NNFunction = MSE, lr=.1):
+    def __init__(self, file=None, /, loss: NNFunction = MSE, lr=.1):
         self.layers = []
         self.file = file
 
@@ -60,6 +60,7 @@ class NeuralNet:
             self.save(self.file)
 
     def save(self, filen):
+        if filen == None: return
         weights, biases = [], []
         for layer in self.layers:
             if isinstance(layer, FCLayer):
