@@ -2,7 +2,7 @@ import numpy as np
 from PIL import Image
 import matplotlib.pyplot as plt
 
-DIFFUSION_STEPS = 9
+DIFFUSION_STEPS = 6
 
 def linear_schedule():
     return np.linspace(0, 1, DIFFUSION_STEPS)
@@ -19,6 +19,7 @@ def square_schedule():
 
 def pow_schedule(power):
     # using a power schedule like this would mean that the backward diffusion converges quickly? less iterations needed for a fine image?
+    # also could mean the innitial amount of noise is too large to be tangible to learn
     return np.linspace(0, 1, DIFFUSION_STEPS) ** power
 
 
