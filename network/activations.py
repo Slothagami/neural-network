@@ -23,7 +23,7 @@ class MSE(NNFunction):
     def derivative(target, prediction): return 2 * (prediction - target) / target.size
 
 class CategoricalCrossEntropy(NNFunction):
-    def function(target, prediction):   return np.sum(target * np.log(prediction))
+    def function(target, prediction):   return np.sum(target * np.log(prediction)) # issue: log of 0 encountered
     def derivative(target, prediction): return prediction - target # not sure this is the derivative
     
 class BinaryCrossEntropy(NNFunction):
