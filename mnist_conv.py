@@ -18,7 +18,8 @@ test_labels  = to_categorical(test_labels )
 # Train
 nn = NeuralNet(lr=.001, loss=MSE)
 
-depth = 3
+depth = 1
+print(nn.lr, depth)
 nn.layers = [
     ConvLayer((1, 28, 28), 3, depth),
     ReshapeLayer((depth, 26, 26), (1, depth * 26 * 26)),
