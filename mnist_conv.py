@@ -2,8 +2,7 @@ from network.neuralnet   import *
 from network.activations import *
 
 from keras.datasets import mnist
-from keras.utils import np_utils
-
+from keras.utils import to_categorical
 import numpy as np
 
 print("Loading Data...")
@@ -13,20 +12,22 @@ print("Loading Data...")
 train_batch = train_batch.reshape(train_batch.shape[0], 1, 28, 28).astype("float32")
 test_batch  = test_batch .reshape(test_batch .shape[0], 1, 28, 28).astype("float32")
 
+train_labels = to_categorical(train_labels)
+test_labels  = to_categorical(test_labels )
 
 # Train
-nn = NeuralNet(lr=.01)
+nn = NeuralNet(lr=.001, loss=MSE)
 
-depth = 1
+depth = 3
 nn.layers = [
-    ConvLayer((1, 28, 28), 5, depth),
-    ActivationLayer(Sigmoid),
+    ConvLayer((1, 28, 28), 3, depth),
     ReshapeLayer((depth, 26, 26), (1, depth * 26 * 26)),
+    ActivationLayer(ReLU),
 
     FCLayer(depth * 26 * 26, 100),
-    ActivationLayer(Sigmoid),
-
+    ActivationLayer(ReLU),
     FCLayer(100, 10),
+
     Softmax()
 ]
 
