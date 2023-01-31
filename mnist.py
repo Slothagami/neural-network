@@ -1,10 +1,9 @@
 from network.neuralnet   import *
 from network.activations import *
+from network.eval        import calc_accuracy
 
 from keras.datasets import mnist
 from keras.utils import np_utils
-
-import numpy as np
 
 print("Loading Data...")
 (train_batch, train_labels), (test_batch, test_labels) = mnist.load_data()
@@ -28,14 +27,5 @@ nn.config((28*28, 100, 50, 10), Tanh)
 print("Beginning Training...")
 nn.train(train_batch, train_labels, 5)
 
-
-# Evaluate Accuracy
-correct = 0
 nsamples = 2000
-for sample, label in zip(nn.predict(test_batch[:nsamples]), test_labels[:nsamples]): 
-    prediction = np.abs(np.round(sample))[0]
-    if np.array_equal(label, prediction):
-        correct += 1 
-
-accuracy = correct / nsamples * 100
-print(f"\nAcuracy: {accuracy:.2f}% ({correct}/{nsamples})")
+calc_accuracy(nn, test_batch[:nsamples], test_labels[:nsamples], print_acc=True)
