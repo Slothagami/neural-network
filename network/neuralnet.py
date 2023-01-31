@@ -60,6 +60,7 @@ class NeuralNet:
             self.save(self.file)
 
     def save(self, filen):
+        # TODO: Save conv layers
         if filen == None: return
         weights, biases = [], []
         for layer in self.layers:
@@ -123,17 +124,27 @@ class ActivationLayer(Layer):
 
 class Softmax(Layer):
     def forward(self, input): 
+        # shift input (has no effect on output, but prevents overflow in exp)
+        input -= np.max(input)
         exp = np.exp(input)
         self.output = exp / np.sum(exp)
         return self.output
 
     def backprop(self, out_error, lr):
+        # outputting the wrong shape
         out_size = np.size(self.output)
+        # out = np.reshape(self.output, out_size)
+        # tmp = np.tile(self.output, out_size)
+        tmp = np.vstack([self.output] * out_size)
         return np.dot(
-            (np.identity(out_size) - self.output.T) * self.output,
-            # np.reshape(out_error, (10,)) # shape (1, 10) apparently != (10,)
-            out_error # shape (1, 10) apparently != (10,)
-        )
+            tmp * (np.identity(out_size) - tmp.T),
+            out_error.T
+        ).reshape((1, out_size))
+        # out_grid = np.vstack([self.output] * out_size)
+        # return np.dot(
+        #     (np.identity(out_size) - out_grid.T)  * out_grid, 
+        #     out_error
+        # )
 
 class ConvLayer(Layer):
     def __init__(self, in_shape, kernel_size, depth):
