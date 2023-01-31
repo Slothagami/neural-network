@@ -32,7 +32,8 @@ nn.layers = [
 ]
 
 print("Beginning Training...")
-# nn.train(train_batch, train_labels, 5)
+nn.train(train_batch, train_labels, 5)
+# Gets ~30% acc w/ 5 epochs
 
 nsamples = 2000
 calc_accuracy(nn, test_batch[:nsamples], test_labels[:nsamples], print_acc=True)
