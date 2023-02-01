@@ -15,7 +15,8 @@ train_labels = to_categorical(train_labels)
 test_labels  = to_categorical(test_labels )
 
 # Train
-nn = NeuralNet(lr=.001, loss=MSE)
+# nn = NeuralNet(lr=.001, loss=MSE) # Gets ~30% acc w/ 5 epochs
+nn = NeuralNet(lr=.00001, loss=CategoricalCrossEntropy) # Gets ~61% acc w/ 5 epochs
 
 depth = 1
 print(nn.lr, depth)
@@ -33,7 +34,7 @@ nn.layers = [
 
 print("Beginning Training...")
 nn.train(train_batch, train_labels, 5)
-# Gets ~30% acc w/ 5 epochs
+
 
 nsamples = 2000
 calc_accuracy(nn, test_batch[:nsamples], test_labels[:nsamples], print_acc=True)
