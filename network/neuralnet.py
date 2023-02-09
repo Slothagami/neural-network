@@ -206,7 +206,7 @@ class ReshapeLayer(Layer):
 
 
 class PoolingLayer(Layer):
-    # Note: Probably only works with 2d arrays atm
+    # Note: Probably only works with 2d arrays atm due to block_reduce taking n dimensional blocks, across multiple color channels
     def __init__(self, kernel_size=2, func=np.max):
         super.__init__()
         self.kernel_size = kernel_size

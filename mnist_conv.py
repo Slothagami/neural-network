@@ -17,7 +17,7 @@ test_labels  = to_categorical(test_labels )
 # Train
 # nn = NeuralNet(lr=.001, loss=MSE) # Gets ~30% acc w/ 5 epochs
 # nn = NeuralNet(lr=.00001, loss=CategoricalCrossEntropy) # Gets ~60% acc w/ 5 epochs
-nn = NeuralNet(lr=.00003, loss=CategoricalCrossEntropy)
+nn = NeuralNet(lr=.000009, loss=CategoricalCrossEntropy)
 
 depth = 1
 print(nn.lr, depth)
@@ -39,9 +39,12 @@ error_graph = nn.train(train_batch, train_labels, 5)
 import matplotlib.pyplot as plt
 print(error_graph)
 plt.plot(error_graph)
+
 plt.ylim((0, 25))
+plt.xlabel("epoch")
+plt.ylabel("error")
+plt.title("Training Error")
+
 plt.show()
 
-
-nsamples = 2000
-calc_accuracy(nn, test_batch[:nsamples], test_labels[:nsamples], print_acc=True)
+calc_accuracy(nn, test_batch, test_labels, print_acc=True)
