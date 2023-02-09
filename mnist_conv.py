@@ -16,7 +16,8 @@ test_labels  = to_categorical(test_labels )
 
 # Train
 # nn = NeuralNet(lr=.001, loss=MSE) # Gets ~30% acc w/ 5 epochs
-nn = NeuralNet(lr=.00001, loss=CategoricalCrossEntropy) # Gets ~61% acc w/ 5 epochs
+# nn = NeuralNet(lr=.00001, loss=CategoricalCrossEntropy) # Gets ~61% acc w/ 5 epochs
+nn = NeuralNet(lr=.00003, loss=CategoricalCrossEntropy) # Gets ~61% acc w/ 5 epochs
 
 depth = 1
 print(nn.lr, depth)
@@ -33,7 +34,12 @@ nn.layers = [
 ]
 
 print("Beginning Training...")
-nn.train(train_batch, train_labels, 5)
+error_graph = nn.train(train_batch, train_labels, 5)
+
+import matplotlib.pyplot as plt
+plt.plot(error_graph)
+plt.ylim((0, 25))
+plt.show()
 
 
 nsamples = 2000

@@ -33,6 +33,7 @@ class NeuralNet:
         return results
 
     def train(self, samples, labels, epochs):
+        error_graph = [] # for plotting error
         samples = np.array(samples)
         labels  = np.array(labels)
         
@@ -56,8 +57,10 @@ class NeuralNet:
             # Calc Average Error
             disp_error /= len(samples)
 
+            error_graph.append(disp_error)
             print(f"Epoch: {epoch + 1}, Error: {disp_error}")
             self.save(self.file)
+        return error_graph
 
     def save(self, filen):
         # TODO: Save conv layers
@@ -131,20 +134,12 @@ class Softmax(Layer):
         return self.output
 
     def backprop(self, out_error, lr):
-        # outputting the wrong shape
         out_size = np.size(self.output)
-        # out = np.reshape(self.output, out_size)
-        # tmp = np.tile(self.output, out_size)
         tmp = np.vstack([self.output] * out_size)
         return np.dot(
             tmp * (np.identity(out_size) - tmp.T),
             out_error.T
         ).reshape((1, out_size))
-        # out_grid = np.vstack([self.output] * out_size)
-        # return np.dot(
-        #     (np.identity(out_size) - out_grid.T)  * out_grid, 
-        #     out_error
-        # )
 
 class ConvLayer(Layer):
     def __init__(self, in_shape, kernel_size, depth):
