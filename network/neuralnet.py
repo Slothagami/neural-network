@@ -204,22 +204,30 @@ class ReshapeLayer(Layer):
     def backprop(self, out_gradient, lr):
         return np.reshape(out_gradient, self.in_shape)
 
-class PoolLayer(Layer):
-    def __init__(self, block_size, depth, function=np.max):
-        self.block_size = (block_size, block_size)
-        self.function   = function
-        self.depth = depth
 
-        self.input = None 
-        self.output = None
-
-    def forward(self, x):
-        self.input = x
-        self.output = block_reduce(x, self.block_size, self.function)
+class PoolingLayer(Layer):
+    # Note: Probably only works with 2d arrays atm
+    def __init__(self, kernel_size=2, func=np.max):
+        super.__init__()
+        self.kernel_size = kernel_size
+        self.func = func
+        
+    def forward(self, img): 
+        self.input = img
+        self.output = block_reduce(img, (self.kernel_size, self.kernel_size), self.func)
         return self.output
-
+    
     def backprop(self, out_gradient, lr):
-        # The values that were the maximum value have gradients equal to 1, and zero elsewhere
-        # because they had no contribution to the output of the max() function
-        for channel in self.input:
-            delta = np.where(self.input == self.output) # ? something like this?
+        width, height = self.input.shape
+        gradient = np.zeros_like(self.input)
+        
+        for x in range(0, width, self.kernel_size):
+            for y in range(0, height, self.kernel_size):
+                kernel = self.input[x: x+self.kernel_size, y: y+self.kernel_size]
+                max_x, max_y = np.unravel_index(np.argmax(kernel), kernel.shape)
+                
+                grad_kernel = np.zeros_like(kernel)
+                grad_kernel[max_x, max_y] = 1
+                
+                gradient[x:x+self.kernel_size, y: y+self.kernel_size] = grad_kernel
+        return gradient * out_gradient
