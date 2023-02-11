@@ -40,7 +40,11 @@ class NeuralNet:
         for epoch in range(epochs):
             disp_error = 0 
 
-            for sample, label in zip(samples, labels):
+            # randomize order of samples
+            dataset = list(zip(samples, labels))
+            np.random.shuffle(dataset)
+
+            for sample, label in dataset:
                 # Forward Propogation
                 output = sample 
                 for layer in self.layers:
