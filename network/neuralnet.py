@@ -204,7 +204,6 @@ class ReshapeLayer(Layer):
     def backprop(self, out_gradient, lr):
         return np.reshape(out_gradient, self.in_shape)
 
-
 class PoolingLayer(Layer):
     # Note: Probably only works with 2d arrays atm due to block_reduce taking n dimensional blocks, across multiple color channels
     def __init__(self, kernel_size=2, func=np.max):
