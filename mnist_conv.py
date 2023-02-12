@@ -28,7 +28,9 @@ nn.layers = [
 
     FCLayer(depth * 26 * 26, 100),
     ActivationLayer(ReLU),
-    FCLayer(100, 10),
+    FCLayer(100, 50),
+    ActivationLayer(ReLU),
+    FCLayer(50, 10),
 
     Softmax()
 ]
@@ -37,4 +39,4 @@ print("Beginning Training...")
 error_graph = nn.train(train_batch, train_labels, 5)
 
 calc_accuracy(nn, test_batch, test_labels, print_acc=True)
-show_error_graph(error_graph)
+show_error_graph(error_graph, ylim=25)
