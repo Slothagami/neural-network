@@ -1,6 +1,6 @@
 from network.neuralnet   import *
 from network.activations import *
-from network.eval        import calc_accuracy
+from network.eval        import *
 
 from keras.datasets import mnist
 from keras.utils import to_categorical
@@ -35,21 +35,6 @@ nn.layers = [
 
 print("Beginning Training...")
 error_graph = nn.train(train_batch, train_labels, 5)
+
 calc_accuracy(nn, test_batch, test_labels, print_acc=True)
-
-# plot average weights
-# for layer in nn.layers:
-#     if hasattr(layer, "weights"):
-#         print(np.average(np.abs(layer.weights)))
-#     if hasattr(layer, "kernels"):
-#         print(np.average(np.abs(layer.kernels)))
-
-# Graph the Error
-import matplotlib.pyplot as plt
-
-plt.plot(error_graph)
-plt.ylim((0, 25))
-plt.xlabel("epoch")
-plt.ylabel("error")
-plt.title("Training Error")
-plt.show()
+show_error_graph(error_graph)

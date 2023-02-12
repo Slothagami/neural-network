@@ -1,5 +1,10 @@
+import matplotlib.pyplot as plt
 import numpy as np
 from statistics import mean
+
+"""
+    Tools for evaluating the performance of AI models
+"""
 
 def calc_accuracy(nn, test_batch, test_labels, print_acc=False):
     loss = []
@@ -19,3 +24,11 @@ def calc_accuracy(nn, test_batch, test_labels, print_acc=False):
         print(f"\nAcuracy: {accuracy:.2f}% ({correct}/{nsamples})")
         print(f"Test Loss: {mean(loss)}")
     return accuracy
+
+def show_error_graph(error_plot, ylim=None):
+    plt.plot(error_plot)
+    if ylim is not None: plt.ylim((0, ylim))
+    plt.xlabel("epoch")
+    plt.ylabel("error")
+    plt.title("Training Error")
+    plt.show()

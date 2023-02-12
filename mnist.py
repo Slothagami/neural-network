@@ -1,6 +1,6 @@
 from network.neuralnet   import *
 from network.activations import *
-from network.eval        import calc_accuracy
+from network.eval        import *
 
 from keras.datasets import mnist
 from keras.utils import np_utils
@@ -25,7 +25,7 @@ nn.config((28*28, 100, 50, 10), Tanh)
 # Gets ~80% acc w/ 5 epochs
 
 print("Beginning Training...")
-nn.train(train_batch, train_labels, 5)
+error_graph = nn.train(train_batch, train_labels, 5)
 
-nsamples = 2000
-calc_accuracy(nn, test_batch[:nsamples], test_labels[:nsamples], print_acc=True)
+calc_accuracy(nn, test_batch, test_labels, print_acc=True)
+show_error_graph(error_graph)
