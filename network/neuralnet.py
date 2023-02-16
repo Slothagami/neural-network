@@ -99,6 +99,7 @@ class Layer:
     def __init__(self): self.input = self.output = None 
     def forward():  raise NotImplementedError
     def backprop(): raise NotImplementedError
+    def update(): pass
 
 class FCLayer(Layer):
     def __init__(self, in_size, out_size):
@@ -121,21 +122,21 @@ class FCLayer(Layer):
         weights_error = np.dot(self.input.T, out_error)
 
         # Update Weights
-        self.delta_weights -= lr * weights_error
-        self.delta_bias    -= lr * out_error
+        self.delta_weights += lr * weights_error
+        self.delta_bias    += lr * out_error
         self.delta_n += 1
 
         return in_error
     
     def update(self):
         # apply the average if the in backprop since last call
-        self.weights += self.delta_weights / self.delta_n
-        self.bias    += self.delta_bias    / self.delta_n
+        self.weights -= self.delta_weights / self.delta_n
+        self.bias    -= self.delta_bias    / self.delta_n
 
         # reset everything
         self.delta_n = 0
-        self.delta_weights *= 0
-        self.delta_bias    *= 0
+        self.delta_weights.fill(0) # reuse array to avoid allocating memory
+        self.delta_bias   .fill(0)
 
 class ActivationLayer(Layer):
     def __init__(self, activation: NNFunction = Sigmoid):
@@ -218,20 +219,20 @@ class ConvLayer(Layer):
                     "full"
                 )
 
-                self.delta_kernels -= lr * kernel_delta
-                self.delta_biases  -= lr * out_gradient
+                self.delta_kernels += lr * kernel_delta
+                self.delta_biases  += lr * out_gradient
                 self.delta_n += 1
 
                 return input_delta
             
     def update(self):
-        self.kernels += self.delta_kernels / self.delta_n
-        self.biases  += self.delta_biases  / self.delta_n
+        self.kernels -= self.delta_kernels / self.delta_n
+        self.biases  -= self.delta_biases  / self.delta_n
 
         # reset everything
         self.delta_n = 0
-        self.delta_kernels *= 0
-        self.delta_biases  *= 0
+        self.delta_kernels.fill(0)
+        self.delta_biases .fill(0)
 
 class ReshapeLayer(Layer):
     def __init__(self, in_shape, out_shape):
