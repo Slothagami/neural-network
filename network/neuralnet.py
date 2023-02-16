@@ -32,7 +32,7 @@ class NeuralNet:
 
         return results
 
-    def train(self, samples, labels, epochs):
+    def train(self, samples, labels, epochs, minibatch_size=100):
         error_graph = [] # for plotting error
         samples = np.array(samples)
         labels  = np.array(labels)
@@ -44,6 +44,7 @@ class NeuralNet:
             dataset = list(zip(samples, labels))
             np.random.shuffle(dataset)
 
+            considered_samples = 0
             for sample, label in dataset:
                 # Forward Propogation
                 output = sample 
@@ -57,6 +58,11 @@ class NeuralNet:
                 error = self.loss.derivative(label, output)
                 for layer in reversed(self.layers):
                     error = layer.backprop(error, self.lr)
+
+                # update batch if at end of it
+                if considered_samples >= minibatch_size:
+                    considered_samples = 0
+                    for layer in self.layers: layer.update()
 
             # Calc Average Error
             disp_error /= len(samples)
