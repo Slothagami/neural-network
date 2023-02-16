@@ -126,6 +126,11 @@ class FCLayer(Layer):
         self.weights += self.delta_weights / self.delta_n
         self.bias    += self.delta_bias    / self.delta_n
 
+        # reset everything
+        self.delta_n = 0
+        self.delta_weights *= 0
+        self.delta_bias    *= 0
+
 class ActivationLayer(Layer):
     def __init__(self, activation: NNFunction = Sigmoid):
         super().__init__()
@@ -172,6 +177,10 @@ class ConvLayer(Layer):
         self.kernels = np.random.randn(*self.kernels_shape)
         self.biases  = np.random.randn(*self.out_shape)
 
+        self.delta_kernels = np.zeros_like(self.kernels)
+        self.delta_biases  = np.zeros_like(self.biases)
+        self.delta_n = 0 # number of samples being averaged over (for division in average)
+
     def forward(self, input):
         self.input = input
         self.output = np.copy(self.biases) # Equal to adding them
@@ -203,9 +212,20 @@ class ConvLayer(Layer):
                     "full"
                 )
 
-                self.kernels -= lr * kernel_delta
-                self.biases  -= lr * out_gradient
+                self.delta_kernels -= lr * kernel_delta
+                self.delta_biases  -= lr * out_gradient
+                self.delta_n += 1
+
                 return input_delta
+            
+    def update(self):
+        self.kernels += self.delta_kernels / self.delta_n
+        self.biases  += self.delta_biases  / self.delta_n
+
+        # reset everything
+        self.delta_n = 0
+        self.delta_kernels *= 0
+        self.delta_biases  *= 0
 
 class ReshapeLayer(Layer):
     def __init__(self, in_shape, out_shape):
