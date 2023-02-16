@@ -100,6 +100,10 @@ class FCLayer(Layer):
         self.weights = np.random.rand(in_size, out_size) - .5
         self.bias    = np.random.rand(1, out_size) - .5
 
+        self.delta_weights = np.zeros_like(self.weights)
+        self.delta_bias    = np.zeros_like(self.bias)
+        self.delta_n = 0 # number of samples being averaged over (for division in average)
+
     def forward(self, input):
         self.input = input 
         self.output = np.dot(input, self.weights) + self.bias 
@@ -111,10 +115,16 @@ class FCLayer(Layer):
         weights_error = np.dot(self.input.T, out_error)
 
         # Update Weights
-        self.weights -= lr * weights_error
-        self.bias    -= lr * out_error
+        self.delta_weights -= lr * weights_error
+        self.delta_bias    -= lr * out_error
+        self.delta_n += 1
 
         return in_error
+    
+    def update(self):
+        # apply the average if the in backprop since last call
+        self.weights += self.delta_weights / self.delta_n
+        self.bias    += self.delta_bias    / self.delta_n
 
 class ActivationLayer(Layer):
     def __init__(self, activation: NNFunction = Sigmoid):

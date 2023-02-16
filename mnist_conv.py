@@ -15,11 +15,10 @@ train_labels = to_categorical(train_labels)
 test_labels  = to_categorical(test_labels )
 
 # Train
-# nn = NeuralNet(lr=.001, loss=MSE) # Gets ~30% acc w/ 5 epochs
-# nn = NeuralNet(lr=.00001, loss=CategoricalCrossEntropy) # Gets ~60% acc w/ 5 epochs
-nn = NeuralNet(lr=.00001, loss=CategoricalCrossEntropy)
+# nn = NeuralNet(lr=.00001, loss=CategoricalCrossEntropy) # Gets ~62% acc w/ 5 epochs
+nn = NeuralNet(lr=.000008, loss=CategoricalCrossEntropy) # Gets ~62% acc w/ 5 epochs
 
-depth = 1
+depth = 2
 print(nn.lr, depth)
 nn.layers = [
     ConvLayer((1, 28, 28), 3, depth),
