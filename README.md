@@ -15,4 +15,5 @@ An Neural Network Libary, made completely from scratch using numpy and python, o
 - test pooling layer
 - optimize memory
 - general speed optimization
+- save conv layers
 - Diffusion Models
