@@ -1,5 +1,5 @@
 from network.neuralnet   import NeuralNet 
-from network.visualize   import show_output_space
+from network.eval        import show_output_space
 from network.activations import *
 
 import numpy as np
