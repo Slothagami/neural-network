@@ -59,7 +59,8 @@ class NeuralNet:
                 for layer in reversed(self.layers):
                     error = layer.backprop(error, self.lr)
 
-                # update batch if at end of it
+                # update batch if at end of 
+                considered_samples += 1
                 if considered_samples >= minibatch_size:
                     considered_samples = 0
                     for layer in self.layers: layer.update()
@@ -97,9 +98,9 @@ class NeuralNet:
 # Layers #
 class Layer:
     def __init__(self): self.input = self.output = None 
-    def forward():  raise NotImplementedError
-    def backprop(): raise NotImplementedError
-    def update(): pass
+    def forward(self):  raise NotImplementedError
+    def backprop(self): raise NotImplementedError
+    def update(self): pass
 
 class FCLayer(Layer):
     def __init__(self, in_size, out_size):
