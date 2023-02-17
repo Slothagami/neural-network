@@ -92,7 +92,7 @@ class NeuralNet:
         np.save(filen, np.array((weights, biases), dtype=object), allow_pickle=True)
 
     def load(self):
-        if not Path(self.file).exists(): return # don't load a file that is't there
+        if self.file is None or not Path(self.file).exists(): return # don't load a file that is't there
         weights, biases = np.load(self.file, allow_pickle=True)
 
         ind = 0

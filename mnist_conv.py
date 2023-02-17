@@ -18,7 +18,7 @@ test_labels  = to_categorical(test_labels )
 parameters = {
     "lr": .525,
     "loss": CategoricalCrossEntropy,
-    "file": "models/mnist_conv.npy"
+    # "file": "models/mnist_conv.npy" # remove to train fresh model and don't save
 }
 nn = NeuralNet(**parameters) # Gets ~88% acc w/ 5 epochs
 print(nn.lr, nn.lr_falloff)
