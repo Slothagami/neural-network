@@ -13,8 +13,7 @@ An Neural Network Libary, made completely from scratch using numpy and python, o
 - Categorical Cross Entropy loss
 
 ### TODO
-- handle multiple color channels
-- test pooling layer (also on multiple color channels)
+- update pooling layer for multiple color channels
 - optimize memory use
 - optimize speed
 - UNets
