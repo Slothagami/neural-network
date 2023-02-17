@@ -10,4 +10,9 @@ An Neural Network Libary, made completely from scratch using numpy and python, o
 - Custom Activations and Loss functions (inherits `NNFunction`)
 - Mean Squared Error loss
 - Categorical Cross Entropy loss
-- Diffusion Models (coming soon)
+
+### TODO
+- test pooling layer
+- optimize memory
+- general speed optimization
+- Diffusion Models
