@@ -94,6 +94,12 @@ class NeuralNet:
                 layer.bias    = biases[ind]
                 ind += 1
 
+# utility #
+def rand(*args):
+    return (np.random.rand(*args) - .5) * 2
+
+def norm(*args):
+    return np.random.randn(*args)
 
 # Layers #
 class Layer:
@@ -105,8 +111,8 @@ class Layer:
 class FCLayer(Layer):
     def __init__(self, in_size, out_size):
         super().__init__()
-        self.weights = np.random.rand(in_size, out_size) - .5
-        self.bias    = np.random.rand(1, out_size) - .5
+        self.weights = rand(in_size, out_size)
+        self.bias    = rand(1, out_size)
 
         self.delta_weights = np.zeros_like(self.weights)
         self.delta_bias    = np.zeros_like(self.bias)
@@ -182,8 +188,8 @@ class ConvLayer(Layer):
         )
         self.kernels_shape = (depth, in_depth, kernel_size, kernel_size)
 
-        self.kernels = np.random.randn(*self.kernels_shape)
-        self.biases  = np.random.randn(*self.out_shape)
+        self.kernels = rand(*self.kernels_shape)
+        self.biases  = rand(*self.out_shape)
 
         self.delta_kernels = np.zeros_like(self.kernels)
         self.delta_biases  = np.zeros_like(self.biases)
