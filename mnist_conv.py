@@ -23,13 +23,13 @@ parameters = {
 nn = NeuralNet(**parameters) # Gets ~88% acc w/ 5 epochs
 print(nn.lr, nn.lr_falloff)
 
-depth = 1
+channels = 1 # mnist is a grayscale dataset
 nn.layers = [
-    ConvLayer((1, 28, 28), 3, depth),
-    ReshapeLayer((depth, 26, 26), (1, depth * 26 * 26)),
+    ConvLayer((1, 28, 28), 3, channels),
+    ReshapeLayer((channels, 26, 26), (1, channels * 26 * 26)),
     ActivationLayer(Tanh),
 
-    FCLayer(depth * 26 * 26, 100),
+    FCLayer(channels * 26 * 26, 100),
     ActivationLayer(Tanh),
     FCLayer(100, 50),
     ActivationLayer(Tanh),
