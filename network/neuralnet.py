@@ -4,11 +4,12 @@ from skimage.measure import block_reduce
 import numpy as np
 
 class NeuralNet:
-    def __init__(self, file=None, /, loss: NNFunction = MSE, lr=.1):
+    def __init__(self, file=None, /, loss: NNFunction = MSE, lr=.1, lr_falloff=1):
         self.layers = []
         self.file = file
 
         self.lr = lr
+        self.lr_falloff = lr_falloff
         self.loss = loss
 
     def add(self, layer): self.layers.append(layer)
@@ -71,6 +72,8 @@ class NeuralNet:
             error_graph.append(disp_error)
             print(f"Epoch: {epoch + 1}, Error: {disp_error}")
             self.save(self.file)
+
+            self.lr *= self.lr_falloff
         return error_graph
 
     def save(self, filen):

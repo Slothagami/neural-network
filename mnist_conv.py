@@ -15,10 +15,14 @@ train_labels = to_categorical(train_labels)
 test_labels  = to_categorical(test_labels )
 
 # Train
-nn = NeuralNet(lr=.55, loss=CategoricalCrossEntropy) # Gets ~88% acc w/ 5 epochs
+parameters = {
+    "lr": .525,
+    "loss": CategoricalCrossEntropy,
+}
+nn = NeuralNet(**parameters) # Gets ~88% acc w/ 5 epochs
+print(nn.lr, nn.lr_falloff)
 
 depth = 1
-print(nn.lr, depth)
 nn.layers = [
     ConvLayer((1, 28, 28), 3, depth),
     ReshapeLayer((depth, 26, 26), (1, depth * 26 * 26)),
