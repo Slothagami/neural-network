@@ -18,7 +18,7 @@ test_labels  = to_categorical(test_labels )
 parameters = {
     "lr": .525,
     "loss": CategoricalCrossEntropy,
-    "file": "models/cifar10.npy" # remove to train fresh model and don't save
+    # "file": "models/cifar10.npy" # remove to train fresh model and don't save
 }
 nn = NeuralNet(**parameters)
 print(nn.lr, nn.lr_falloff)
@@ -42,7 +42,7 @@ nn.load()
 calc_accuracy(nn, test_batch, test_labels, print_acc=True)
 
 print("Beginning Training...")
-error_graph = nn.train(train_batch, train_labels, 1, 64)
+error_graph = nn.train(train_batch, train_labels, 5, 64)
 
 calc_accuracy(nn, test_batch, test_labels, print_acc=True)
 show_error_graph(error_graph, ylim=5)
