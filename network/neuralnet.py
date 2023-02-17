@@ -2,9 +2,10 @@ from network.activations import *
 from scipy import signal
 from skimage.measure import block_reduce
 import numpy as np
+from pathlib import Path
 
 class NeuralNet:
-    def __init__(self, file=None, /, loss: NNFunction = MSE, lr=.1, lr_falloff=1):
+    def __init__(self, /, file=None, loss: NNFunction = MSE, lr=.1, lr_falloff=1):
         self.layers = []
         self.file = file
 
@@ -77,7 +78,6 @@ class NeuralNet:
         return error_graph
 
     def save(self, filen):
-        # TODO: Save conv layers
         if filen == None: return
         weights, biases = [], []
         for layer in self.layers:
@@ -85,9 +85,14 @@ class NeuralNet:
                 weights.append(layer.weights)
                 biases.append(layer.bias)
 
-        np.save(filen, (weights, biases), allow_pickle=True)
+            if isinstance(layer, ConvLayer):
+                weights.append(layer.kernels)
+                biases.append(layer.biases)
+
+        np.save(filen, np.array((weights, biases), dtype=object), allow_pickle=True)
 
     def load(self):
+        if not Path(self.file).exists(): return # don't load a file that is't there
         weights, biases = np.load(self.file, allow_pickle=True)
 
         ind = 0
@@ -95,6 +100,11 @@ class NeuralNet:
             if isinstance(layer, FCLayer):
                 layer.weights = weights[ind]
                 layer.bias    = biases[ind]
+                ind += 1
+
+            if isinstance(layer, ConvLayer):
+                layer.kernels = weights[ind]
+                layer.biases  = biases[ind]
                 ind += 1
 
 # utility #
@@ -258,7 +268,6 @@ class ReshapeLayer(Layer):
 class PoolingLayer(Layer):
     # Note: Probably only works with 2d arrays atm due to block_reduce taking n dimensional blocks, across multiple color channels
     def __init__(self, kernel_size=2, func=np.max):
-        super.__init__()
         self.kernel_size = kernel_size
         self.func = func
         

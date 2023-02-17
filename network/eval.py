@@ -22,7 +22,7 @@ def calc_accuracy(nn, test_batch, test_labels, print_acc=False):
     accuracy = correct / nsamples * 100
     if print_acc: 
         print(f"\nAcuracy: {accuracy:.2f}% ({correct}/{nsamples})")
-        print(f"Test Loss: {mean(loss)}")
+        print(f"Test Loss: {mean(loss)}\n")
     return accuracy
 
 def show_error_graph(error_plot, ylim=None):

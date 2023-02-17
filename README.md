@@ -1,5 +1,6 @@
 # Neural Netwok
 An Neural Network Libary, made completely from scratch using numpy and python, originally based on [this article](https://towardsdatascience.com/math-neural-network-from-scratch-in-python-d6da9f29ce65), currently supports:
+- loading, and automatic saving, of trained models
 - Fully Connected Layers
 - Convolutional Layers
 - Softmax
@@ -14,6 +15,5 @@ An Neural Network Libary, made completely from scratch using numpy and python, o
 ### TODO
 - test pooling layer
 - optimize memory
-- general speed optimization
-- save conv layers
+- general speed optimizations
 - Diffusion Models

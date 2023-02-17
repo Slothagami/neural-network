@@ -18,6 +18,7 @@ test_labels  = to_categorical(test_labels )
 parameters = {
     "lr": .525,
     "loss": CategoricalCrossEntropy,
+    "file": "mnist_conv_weights.npy"
 }
 nn = NeuralNet(**parameters) # Gets ~88% acc w/ 5 epochs
 print(nn.lr, nn.lr_falloff)
@@ -36,6 +37,9 @@ nn.layers = [
 
     Softmax()
 ]
+
+nn.load()
+calc_accuracy(nn, test_batch, test_labels, print_acc=True)
 
 print("Beginning Training...")
 error_graph = nn.train(train_batch, train_labels, 5, 64)
