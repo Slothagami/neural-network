@@ -5,12 +5,13 @@ import numpy as np
 from pathlib import Path
 
 class NeuralNet:
-    def __init__(self, /, file=None, loss: NNFunction = MSE, lr=.1, lr_falloff=1):
+    def __init__(self, /, file=None, loss: NNFunction = MSE, lr=.1, lr_falloff=1, lr_falloff_step=3):
         self.layers = []
         self.file = file
 
         self.lr = lr
         self.lr_falloff = lr_falloff
+        self.lr_falloff_step = lr_falloff_step
         self.loss = loss
 
     def add(self, layer): self.layers.append(layer)
@@ -74,7 +75,8 @@ class NeuralNet:
             print(f"Epoch: {epoch + 1}, Error: {disp_error}")
             self.save(self.file)
 
-            self.lr *= self.lr_falloff
+            if epoch != 0 and epoch % self.lr_falloff_step == 0:
+                self.lr *= self.lr_falloff # happens every lr_falloff_step epochs
         return error_graph
 
     def save(self, filen):

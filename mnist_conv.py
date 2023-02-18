@@ -17,6 +17,7 @@ test_labels  = to_categorical(test_labels )
 # Train
 parameters = {
     "lr": .525,
+    "lr_falloff": .9,
     "loss": CategoricalCrossEntropy,
     # "file": "models/mnist_conv.npy" # remove to train fresh model and don't save
 }
