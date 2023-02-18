@@ -11,7 +11,7 @@ class Sigmoid(NNFunction):
 
 class Tanh(NNFunction):
     def function(x):   return np.tanh(x)
-    def derivative(x): return 1 - np.tanh(x) ** 2
+    def derivative(x): return 1 - np.square(np.tanh(x))
 
 class ReLU(NNFunction):
     def function(x):   return np.maximum(0, x)

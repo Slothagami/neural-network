@@ -200,6 +200,7 @@ class ConvLayer(Layer):
             in_width  - kernel_size + 1
         )
         self.kernels_shape = (depth, in_depth, kernel_size, kernel_size)
+        self.output = np.zeros(self.out_shape)
 
         self.kernels = rand(*self.kernels_shape)
         self.biases  = rand(*self.out_shape)
@@ -214,16 +215,16 @@ class ConvLayer(Layer):
 
     def forward(self, input):
         self.input = input
-        self.output = np.copy(self.biases) # Equal to adding them
 
         for depth in range(self.depth):
             for in_depth in range(self.in_depth):
-                self.output[depth] += signal.correlate2d(
+                self.output[depth] = signal.correlate2d(
                     self.input[in_depth], 
                     self.kernels[depth, in_depth], 
                     "valid"
                 )
 
+        self.output += self.biases # avoid copying self.biases to memory beforehand
         return self.output
 
     def backprop(self, out_gradient, lr):
