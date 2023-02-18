@@ -208,6 +208,10 @@ class ConvLayer(Layer):
         self.delta_biases  = np.zeros_like(self.biases)
         self.delta_n = 0 # number of samples being averaged over (for division in average)
 
+        # for backprop:
+        self.kernel_grad = np.zeros(self.kernels_shape)
+        self.input_grad  = np.zeros(self.in_shape)
+
     def forward(self, input):
         self.input = input
         self.output = np.copy(self.biases) # Equal to adding them
@@ -223,27 +227,27 @@ class ConvLayer(Layer):
         return self.output
 
     def backprop(self, out_gradient, lr):
-        kernel_delta = np.zeros(self.kernels_shape)
-        input_delta  = np.zeros(self.in_shape)
+        self.kernel_grad.fill(0)
+        self.input_grad .fill(0)
 
         for depth in range(self.depth):
             for in_depth in range(self.in_depth):
-                kernel_delta[depth, in_depth] = signal.correlate2d(
+                self.kernel_grad[depth, in_depth] = signal.correlate2d(
                     self.input[in_depth], 
                     out_gradient[depth], 
                     "valid"
                 )
-                input_delta[in_depth] = signal.convolve2d(
+                self.input_grad[in_depth] = signal.convolve2d(
                     out_gradient[depth],
                     self.kernels[depth, in_depth], 
                     "full"
                 )
 
-                self.delta_kernels += lr * kernel_delta
-                self.delta_biases  += lr * out_gradient
-                self.delta_n += 1
+        self.delta_kernels += lr * self.kernel_grad
+        self.delta_biases  += lr * out_gradient
+        self.delta_n += 1
 
-                return input_delta
+        return self.input_grad
             
     def update(self):
         self.kernels -= self.delta_kernels / self.delta_n

@@ -14,7 +14,6 @@ An Neural Network Libary, made completely from scratch using numpy and python, o
 
 ### TODO
 - update pooling layer for multiple color channels
-- optimize memory use
-- optimize speed
+- optimize speed (memory use and conv/pooling algorythum)
 - UNets
 - Diffusion Models
