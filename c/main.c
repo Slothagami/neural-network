@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include "matrix.h"
 
-double min(double);
+double func(double);
 
 int main() {
 	double a_data[] = {1, 2, 3, 4};
@@ -13,7 +13,7 @@ int main() {
     mat *b = new_matrix(2, 2);
     b -> data = b_data;
     
-    mat* prod = mmap(min, a);
+    mat* prod = mmap(func, a);
 
 	printm(prod);
     
@@ -24,6 +24,6 @@ int main() {
 	return 0;
 }
 
-double min(double a) {
-    return a-1;
+double func(double x) {
+    return x - 1;
 }

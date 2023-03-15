@@ -7,6 +7,7 @@ mat* new_matrix(unsigned int width, unsigned int height) {
     
     matrix -> width  = width;
     matrix -> height = height;
+    matrix -> size   = width * height;
     matrix -> data   = malloc(sizeof(double) * width * height);
     
     return matrix;
@@ -51,38 +52,31 @@ mat* mdot(mat* a, mat* b) {
 }
 
 mat* mscale(double scale, mat* matrix) {
-	unsigned int size = matrix -> width * matrix -> height;
-    for(unsigned int i = 0; i < size; i++) {
+    for(unsigned int i = 0; i < matrix -> size; i++) {
     	matrix -> data[i] *= scale;
     }
     return matrix;
 }
 
 mat* madd(mat* a, mat* b) {
-	unsigned int size  = a -> width * a -> height;
     mat *sum = new_matrix(a -> width, a -> height);
-
-    for(unsigned int i = 0; i < size; i++) {
+    for(unsigned int i = 0; i < a -> size; i++) {
     	sum -> data[i] = b -> data[i] + a -> data[i];
     }
     return sum;
 }
 
 mat* mmult(mat* a, mat* b) {
-    unsigned int size  = a -> width * a -> height;
     mat *prod = new_matrix(a -> width, a -> height);
-
-    for(unsigned int i = 0; i < size; i++) {
+    for(unsigned int i = 0; i < a -> size; i++) {
     	prod -> data[i] = b -> data[i] * a -> data[i];
     }
     return prod;
 }
 
 mat* mmap(double (*func)(double), mat* matrix) {
-    unsigned int size  = matrix -> width * matrix -> height;
     mat *map = new_matrix(matrix -> width, matrix -> height);
-
-    for(unsigned int i = 0; i < size; i++) {
+    for(unsigned int i = 0; i < matrix -> size; i++) {
     	map -> data[i] = func(matrix -> data[i]);
     }
     return map;

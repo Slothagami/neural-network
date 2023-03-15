@@ -2,6 +2,7 @@ typedef struct {
 	double* data;
     unsigned int width;
     unsigned int height;
+    unsigned int size;
 } mat;
 
 void printm(mat*);
