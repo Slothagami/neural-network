@@ -12,10 +12,11 @@ mat* new_matrix(unsigned int, unsigned int, double*);
 // do i need a matrix free method too?
 mat* mdot(mat*, mat*);
 mat* mscale(double, mat*);
+mat* madd(mat*, mat*);
+mat* mmult(mat*, mat*);
+mat* mmap(double (*func)(double), mat*);
 
 // element wize function
-// element wize product
-// element wize addition
 
 int main() {
 	double a_data[] = {1, 2, 3, 4};
@@ -24,11 +25,8 @@ int main() {
     double b_data[] = {6, 5, 4, 7};
     mat *b = new_matrix(2, 2, b_data);
     
-    mat* prod = mdot(a, b);
-    
-    printm(prod);
-    mscale(.5, prod);
-    
+    mat* prod = mmult(a, b);
+
 	printm(prod);
     
 	free(a);
@@ -94,4 +92,40 @@ mat* mscale(double scale, mat* matrix) {
     	matrix -> data[i] *= scale;
     }
     return matrix;
+}
+
+mat* madd(mat* a, mat* b) {
+	unsigned int size  = a -> width * a -> height;
+
+    double *data = malloc(sizeof(double) * size);
+    mat *sum = new_matrix(a -> width, a -> height, data);
+
+    for(unsigned int i = 0; i < size; i++) {
+    	data[i] = b -> data[i] + a -> data[i];
+    }
+    return sum;
+}
+
+mat* mmult(mat* a, mat* b) {
+    unsigned int size  = a -> width * a -> height;
+
+    double *data = malloc(sizeof(double) * size);
+    mat *prod = new_matrix(a -> width, a -> height, data);
+
+    for(unsigned int i = 0; i < size; i++) {
+    	data[i] = b -> data[i] * a -> data[i];
+    }
+    return prod;
+}
+
+mat* mmap(double (*func)(double), mat* matrix) {
+    unsigned int size  = matrix -> width * matrix -> height;
+
+    double *data = malloc(sizeof(double) * size);
+    mat *map = new_matrix(matrix -> width, matrix -> height, data);
+
+    for(unsigned int i = 0; i < size; i++) {
+    	data[i] = func(data[i]);
+    }
+    return map;
 }
