@@ -1,46 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-
-typedef struct {
-	double* data;
-    unsigned int width;
-    unsigned int height;
-} mat;
-
-void printm(mat*);
-mat* new_matrix(unsigned int, unsigned int, double*);
-// do i need a matrix free method too?
-mat* mdot(mat*, mat*);
-mat* mscale(double, mat*);
-mat* madd(mat*, mat*);
-mat* mmult(mat*, mat*);
-mat* mmap(double (*func)(double), mat*);
-
-double min(double);
-
-// element wize function
-
-int main() {
-	double a_data[] = {1, 2, 3, 4};
-	mat *a = new_matrix(2, 2, a_data);
-    
-    double b_data[] = {6, 5, 4, 7};
-    mat *b = new_matrix(2, 2, b_data);
-    
-    mat* prod = mmap(min, a);
-
-	printm(prod);
-    
-	free(a);
-    free(b);
-    free(prod);
-
-	return 0;
-}
-
-double min(double a) {
-    return a-1;
-}
+#include "matrix.h"
 
 mat* new_matrix(unsigned int width, unsigned int height, double* data) {
 	mat *matrix = malloc(sizeof(mat));
