@@ -7,6 +7,7 @@ typedef struct {
 
 void printm(mat*);
 mat* new_matrix(unsigned int, unsigned int);
+void mfree(mat*);
 mat* matrix_like(mat*);
 // do i need a matrix free method too?
 mat* mdot(mat*, mat*);
