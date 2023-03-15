@@ -5,13 +5,17 @@ typedef struct {
     unsigned int size;
 } mat;
 
-void printm(mat*);
+// Constructor like
 mat* new_matrix(unsigned int, unsigned int);
-void mfree(mat*);
 mat* matrix_like(mat*);
-// do i need a matrix free method too?
+void mfree(mat*);
+
+// Operations
 mat* mdot(mat*, mat*);
 mat* mscale(double, mat*);
 mat* madd(mat*, mat*);
 mat* mmult(mat*, mat*);
 mat* mmap(double (*func)(double), mat*);
+
+// Misc
+void printm(mat*);
