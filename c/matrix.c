@@ -16,6 +16,8 @@ mat* madd(mat*, mat*);
 mat* mmult(mat*, mat*);
 mat* mmap(double (*func)(double), mat*);
 
+double min(double);
+
 // element wize function
 
 int main() {
@@ -25,7 +27,7 @@ int main() {
     double b_data[] = {6, 5, 4, 7};
     mat *b = new_matrix(2, 2, b_data);
     
-    mat* prod = mmult(a, b);
+    mat* prod = mmap(min, a);
 
 	printm(prod);
     
@@ -34,6 +36,10 @@ int main() {
     free(prod);
 
 	return 0;
+}
+
+double min(double a) {
+    return a-1;
 }
 
 mat* new_matrix(unsigned int width, unsigned int height, double* data) {
@@ -125,7 +131,7 @@ mat* mmap(double (*func)(double), mat* matrix) {
     mat *map = new_matrix(matrix -> width, matrix -> height, data);
 
     for(unsigned int i = 0; i < size; i++) {
-    	data[i] = func(data[i]);
+    	data[i] = func(matrix -> data[i]);
     }
     return map;
 }
