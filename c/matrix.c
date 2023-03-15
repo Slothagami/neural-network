@@ -52,14 +52,15 @@ mat* mdot(mat* a, mat* b) {
         }
     }
     
-    return prod; // is there a better way than O(n^3)?
+    return prod;
 }
 
 mat* mscale(double scale, mat* matrix) {
+    mat *scaled = matrix_like(matrix);
     for(unsigned int i = 0; i < matrix -> size; i++) {
-    	matrix -> data[i] *= scale;
+    	scaled -> data[i] = scale * matrix -> data[i];
     }
-    return matrix;
+    return scaled;
 }
 
 mat* madd(mat* a, mat* b) {
