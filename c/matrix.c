@@ -13,6 +13,10 @@ mat* new_matrix(unsigned int width, unsigned int height) {
     return matrix;
 }
 
+mat* matrix_like(mat* template) {
+    return new_matrix(template -> width, template -> height);
+}
+
 void printm(mat* matrix) {
 	for(unsigned int y = 0; y < matrix -> height; y++){
 		for(unsigned int x = 0; x < matrix -> width; x++){
@@ -59,7 +63,7 @@ mat* mscale(double scale, mat* matrix) {
 }
 
 mat* madd(mat* a, mat* b) {
-    mat *sum = new_matrix(a -> width, a -> height);
+    mat *sum = matrix_like(a);
     for(unsigned int i = 0; i < a -> size; i++) {
     	sum -> data[i] = b -> data[i] + a -> data[i];
     }
@@ -67,7 +71,7 @@ mat* madd(mat* a, mat* b) {
 }
 
 mat* mmult(mat* a, mat* b) {
-    mat *prod = new_matrix(a -> width, a -> height);
+    mat *prod = matrix_like(a);
     for(unsigned int i = 0; i < a -> size; i++) {
     	prod -> data[i] = b -> data[i] * a -> data[i];
     }
@@ -75,7 +79,7 @@ mat* mmult(mat* a, mat* b) {
 }
 
 mat* mmap(double (*func)(double), mat* matrix) {
-    mat *map = new_matrix(matrix -> width, matrix -> height);
+    mat *map = matrix_like(matrix);
     for(unsigned int i = 0; i < matrix -> size; i++) {
     	map -> data[i] = func(matrix -> data[i]);
     }
