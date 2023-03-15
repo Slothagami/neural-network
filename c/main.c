@@ -17,9 +17,9 @@ int main() {
 
 	printm(prod);
     
-	free(a);
-    free(b);
-    free(prod);
+	mfree(a);
+    mfree(b);
+    mfree(prod);
 
 	return 0;
 }

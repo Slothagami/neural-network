@@ -13,6 +13,11 @@ mat* new_matrix(unsigned int width, unsigned int height) {
     return matrix;
 }
 
+void mfree(mat* matrix) {
+    free(matrix -> data);
+    free(matrix);
+}
+
 mat* matrix_like(mat* template) {
     return new_matrix(template -> width, template -> height);
 }
