@@ -5,7 +5,7 @@ typedef struct {
 } mat;
 
 void printm(mat*);
-mat* new_matrix(unsigned int, unsigned int, double*);
+mat* new_matrix(unsigned int, unsigned int);
 // do i need a matrix free method too?
 mat* mdot(mat*, mat*);
 mat* mscale(double, mat*);

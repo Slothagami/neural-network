@@ -2,12 +2,12 @@
 #include <stdlib.h>
 #include "matrix.h"
 
-mat* new_matrix(unsigned int width, unsigned int height, double* data) {
+mat* new_matrix(unsigned int width, unsigned int height) {
 	mat *matrix = malloc(sizeof(mat));
     
     matrix -> width  = width;
     matrix -> height = height;
-    matrix -> data   = data;
+    matrix -> data   = malloc(sizeof(double) * width * height);
     
     return matrix;
 }
@@ -26,10 +26,9 @@ mat* mdot(mat* a, mat* b) {
 	// calculate output size, and allocate memory for the data
 	unsigned int width  = b -> width;
     unsigned int height = a -> height;
-    double *data = malloc(sizeof(double) * width * height);
-    
+
     // create product matrix
-    mat* prod = new_matrix(width, height, data);
+    mat* prod = new_matrix(width, height);
     
     // calculate matrix product
     for(unsigned int x = 0; x < width; x++) {
@@ -44,7 +43,7 @@ mat* mdot(mat* a, mat* b) {
             }
         
         	// can still use data because its a pointer
-        	data[width * y + x] = sum;
+        	prod -> data[width * y + x] = sum;
         }
     }
     
@@ -52,7 +51,6 @@ mat* mdot(mat* a, mat* b) {
 }
 
 mat* mscale(double scale, mat* matrix) {
-	// multiply each element by a scalar
 	unsigned int size = matrix -> width * matrix -> height;
     for(unsigned int i = 0; i < size; i++) {
     	matrix -> data[i] *= scale;
@@ -62,36 +60,30 @@ mat* mscale(double scale, mat* matrix) {
 
 mat* madd(mat* a, mat* b) {
 	unsigned int size  = a -> width * a -> height;
-
-    double *data = malloc(sizeof(double) * size);
-    mat *sum = new_matrix(a -> width, a -> height, data);
+    mat *sum = new_matrix(a -> width, a -> height);
 
     for(unsigned int i = 0; i < size; i++) {
-    	data[i] = b -> data[i] + a -> data[i];
+    	sum -> data[i] = b -> data[i] + a -> data[i];
     }
     return sum;
 }
 
 mat* mmult(mat* a, mat* b) {
     unsigned int size  = a -> width * a -> height;
-
-    double *data = malloc(sizeof(double) * size);
-    mat *prod = new_matrix(a -> width, a -> height, data);
+    mat *prod = new_matrix(a -> width, a -> height);
 
     for(unsigned int i = 0; i < size; i++) {
-    	data[i] = b -> data[i] * a -> data[i];
+    	prod -> data[i] = b -> data[i] * a -> data[i];
     }
     return prod;
 }
 
 mat* mmap(double (*func)(double), mat* matrix) {
     unsigned int size  = matrix -> width * matrix -> height;
-
-    double *data = malloc(sizeof(double) * size);
-    mat *map = new_matrix(matrix -> width, matrix -> height, data);
+    mat *map = new_matrix(matrix -> width, matrix -> height);
 
     for(unsigned int i = 0; i < size; i++) {
-    	data[i] = func(matrix -> data[i]);
+    	map -> data[i] = func(matrix -> data[i]);
     }
     return map;
 }
