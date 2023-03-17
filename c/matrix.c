@@ -33,11 +33,17 @@ void printm(mat* matrix) {
     }
 }
 
+int msame_shape(mat* a, mat* b) {
+    if(a -> width  != b -> width ) return 0;
+    if(a -> height != b -> height) return 0;
+    return 1;
+}
+
 mat* mdot(mat* a, mat* b) {
-	// calculate output size, and allocate memory for the data
-    assert(b -> width == a -> height);
+    // assert the shapes can be multiplied
     assert(b -> height == a -> width);
 
+	// calculate output size, and allocate memory for the data
 	unsigned int width  = b -> width;
     unsigned int height = a -> height;
 
@@ -73,6 +79,7 @@ mat* mscale(double scale, mat* matrix) {
 }
 
 mat* madd(mat* a, mat* b) {
+    assert(msame_shape(a, b));
     mat *sum = matrix_like(a);
     for(unsigned int i = 0; i < a -> size; i++) {
     	sum -> data[i] = b -> data[i] + a -> data[i];
@@ -81,6 +88,7 @@ mat* madd(mat* a, mat* b) {
 }
 
 mat* mmult(mat* a, mat* b) {
+    assert(msame_shape(a, b));
     mat *prod = matrix_like(a);
     for(unsigned int i = 0; i < a -> size; i++) {
     	prod -> data[i] = b -> data[i] * a -> data[i];

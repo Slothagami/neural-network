@@ -19,3 +19,4 @@ mat* mmap(double (*func)(double), mat*);
 
 // Misc
 void printm(mat*);
+int msame_shape(mat*, mat*);

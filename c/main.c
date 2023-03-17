@@ -5,7 +5,7 @@
 double func(double);
 
 int main() {
-	double a_data[] = {1, 2, 3, 4};
+	double a_data[] = {1, 2, 3, 4, 5, 6};
 	mat *a = new_matrix(2, 3);
     a -> data = a_data;
     
@@ -13,7 +13,7 @@ int main() {
     mat *b = new_matrix(2, 2);
     b -> data = b_data;
     
-    mat* prod = mmap(func, a);
+    mat* prod = madd(a, b);
 
 	printm(prod);
     
