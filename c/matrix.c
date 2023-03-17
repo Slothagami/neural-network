@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <assert.h>
 #include "matrix.h"
 
 mat* new_matrix(unsigned int width, unsigned int height) {
@@ -34,6 +35,9 @@ void printm(mat* matrix) {
 
 mat* mdot(mat* a, mat* b) {
 	// calculate output size, and allocate memory for the data
+    assert(b -> width == a -> height);
+    assert(b -> height == a -> width);
+
 	unsigned int width  = b -> width;
     unsigned int height = a -> height;
 
