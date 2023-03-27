@@ -7,6 +7,7 @@ typedef struct {
 
 // Constructor like
 mat* new_matrix(unsigned int, unsigned int);
+mat* rand_matrix(unsigned int, unsigned int);
 mat* matrix_like(mat*);
 void mfree(mat*);
 

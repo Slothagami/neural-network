@@ -5,21 +5,9 @@
 double func(double);
 
 int main() {
-	double a_data[] = {1, 2, 3, 4, 5, 6};
-	mat *a = new_matrix(2, 3);
-    a -> data = a_data;
-    
-    double b_data[] = {6, 5, 4, 7};
-    mat *b = new_matrix(2, 2);
-    b -> data = b_data;
-    
-    mat* prod = madd(a, b);
-
-	printm(prod);
-    
+	mat *a = rand_matrix(2, 3);
+	printm(a);
 	mfree(a);
-    mfree(b);
-    mfree(prod);
 
 	return 0;
 }

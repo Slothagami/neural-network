@@ -14,6 +14,14 @@ mat* new_matrix(unsigned int width, unsigned int height) {
     return matrix;
 }
 
+mat* rand_matrix(unsigned int width, unsigned int height) {
+    mat *matrix = new_matrix(width, height);
+    for(unsigned int i = 0; i < width * height; i++) {
+        matrix -> data[i] = (float) rand() / RAND_MAX;
+    }
+    return matrix;
+}
+
 void mfree(mat* matrix) {
     free(matrix -> data);
     free(matrix);
