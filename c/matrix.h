@@ -19,5 +19,6 @@ mat* mmult(mat*, mat*);
 mat* mmap(double (*func)(double), mat*);
 
 // Misc
+void mfill(mat*, double);
 void printm(mat*);
 int msame_shape(mat*, mat*);

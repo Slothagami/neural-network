@@ -31,6 +31,12 @@ mat* matrix_like(mat* template) {
     return new_matrix(template -> width, template -> height);
 }
 
+void mfill(mat* matrix, double value) {
+    for(unsigned int i = 0; i < matrix -> size; i++) {
+        matrix -> data[i] = value;
+    }
+}
+
 void printm(mat* matrix) {
 	for(unsigned int y = 0; y < matrix -> height; y++){
 		for(unsigned int x = 0; x < matrix -> width; x++){
