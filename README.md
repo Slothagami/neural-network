@@ -3,9 +3,9 @@ An Neural Network Libary, made completely from scratch using python and C. My ai
 
 ### C TODO (Short term)
 - polish and optimize matrix.c
-- make a nn libary (standard FC model)
+- make nn libary (standard FC model)
 - connect back to python? to load datasets and use its interface
-- ConvNet in C
+- ConvNet
 
 ### C TODO (Long)
 - loading, and automatic saving, of trained models
@@ -15,11 +15,10 @@ An Neural Network Libary, made completely from scratch using python and C. My ai
 - Sigmoid Activation
 - Tanh Activation
 - ReLU Activation
-- Custom layer types (inherits `Layer`)
-- Custom Activations and Loss functions (inherits `NNFunction`)
+- Custom layer types
+- Custom Activations and Loss functions
 - Mean Squared Error loss
 - Categorical Cross Entropy loss
 - update pooling layer for multiple color channels
-- convert modules to C for speed?
 - UNets
 - Diffusion Models
