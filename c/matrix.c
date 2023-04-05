@@ -45,6 +45,7 @@ void printm(mat* matrix) {
     	}
         printf("\n");
     }
+    printf("\n");
 }
 
 int msame_shape(mat* a, mat* b) {
