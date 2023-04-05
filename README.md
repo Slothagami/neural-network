@@ -2,7 +2,6 @@
 An Neural Network Libary, made completely from scratch using python and C. My aim is to create a diffusion model to generate images completely from zero.
 
 ### C TODO (Short term)
-- polish and optimize matrix.c
 - make nn libary (standard FC model)
 - connect back to python? to load datasets and use its interface
 - ConvNet

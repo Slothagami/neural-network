@@ -1,17 +1,21 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "matrix.h"
-
-double func(double);
+#include "nn.h"
 
 int main() {
-	mat *a = rand_matrix(2, 3);
-	printm(a);
-	mfree(a);
+	mat *weights = rand_matrix(1, 2);
+	mat *bias = rand_matrix(1, 1);
+	printm(weights);
+
+	mat *input = new_matrix(2, 1);
+	mat *out = fc_layer(input, weights, bias);
+	printm(out);
+
+	mfree(weights);
+	mfree(bias);
+	mfree(input);
+	mfree(out);
 
 	return 0;
-}
-
-double func(double x) {
-    return x - 1;
 }
