@@ -118,3 +118,17 @@ mat* mmap(double (*func)(double), mat* matrix) {
     }
     return map;
 }
+
+mat* mtranspose(mat* matrix) {
+    mat* transpose = new_matrix(matrix -> height, matrix -> width);
+
+    // rearrange the data, calculate transposed index
+    for(unsigned int i = 0; i < matrix -> size; i++) {
+        unsigned int x = i % matrix -> width;
+        unsigned int y = i / matrix -> width;
+
+        // flip the x and y
+        transpose -> data[x * transpose -> width + y] = matrix -> data[i];
+    }
+    return transpose;
+}

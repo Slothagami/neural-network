@@ -17,6 +17,7 @@ mat* mscale(double, mat*);
 mat* madd(mat*, mat*);
 mat* mmult(mat*, mat*);
 mat* mmap(double (*func)(double), mat*);
+mat* mtranspose(mat*);
 
 // Misc
 void mfill(mat*, double);
