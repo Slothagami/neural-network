@@ -101,6 +101,9 @@ mat* madd(mat* a, mat* b) {
     }
     return sum;
 }
+mat* msub(mat* a, mat* b) {
+    return madd(a, mscale(-1, b));
+}
 
 mat* mmult(mat* a, mat* b) {
     assert(msame_shape(a, b));

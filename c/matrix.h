@@ -15,6 +15,7 @@ void mfree(mat*);
 mat* mdot(mat*, mat*);
 mat* mscale(double, mat*);
 mat* madd(mat*, mat*);
+mat* msub(mat*, mat*);
 mat* mmult(mat*, mat*);
 mat* mmap(double (*func)(double), mat*);
 mat* mtranspose(mat*);
