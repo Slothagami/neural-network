@@ -113,6 +113,14 @@ mat* mmult(mat* a, mat* b) {
     }
     return prod;
 }
+mat* mdiv(mat* a, mat* b) {
+    assert(msame_shape(a, b));
+    mat *prod = matrix_like(a);
+    for(unsigned int i = 0; i < a -> size; i++) {
+    	prod -> data[i] = b -> data[i] / a -> data[i];
+    }
+    return prod;
+}
 
 mat* mmap(double (*func)(double), mat* matrix) {
     mat *map = matrix_like(matrix);
