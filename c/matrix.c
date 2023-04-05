@@ -92,6 +92,9 @@ mat* mscale(double scale, mat* matrix) {
     }
     return scaled;
 }
+mat* mscalediv(mat* matrix, double divideby) {
+    return mscale(1/divideby, matrix);
+}
 
 mat* madd(mat* a, mat* b) {
     assert(msame_shape(a, b));

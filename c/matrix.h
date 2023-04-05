@@ -14,6 +14,7 @@ void mfree(mat*);
 // Operations
 mat* mdot(mat*, mat*);
 mat* mscale(double, mat*);
+mat* mscalediv(mat*, double divideby);
 mat* madd(mat*, mat*);
 mat* msub(mat*, mat*);
 mat* mmult(mat*, mat*);
