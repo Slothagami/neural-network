@@ -41,7 +41,7 @@ void printm(mat* matrix) {
 	for(unsigned int y = 0; y < matrix -> height; y++){
 		for(unsigned int x = 0; x < matrix -> width; x++){
         	// change print precision, global var?
-    		printf("%.1f ", matrix -> data[matrix -> width * y + x]);
+    		printf("%.4f ", matrix -> data[matrix -> width * y + x]);
     	}
         printf("\n");
     }
