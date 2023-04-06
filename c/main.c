@@ -14,9 +14,9 @@ int main() {
 	mat* out;
 	mat* error;
 
-	for(int i = 0; i < 20; i++) {
+	for(int i = 0; i < 15; i++) {
 		out = fc_layer(input, weights, bias);
-		printm(out);
+		// printm(out);
 		printf("error: %f\n", mse(target, out));
 
 		error = mse_grad(target, out);

@@ -95,6 +95,20 @@ mat* mscale(double scale, mat* matrix) {
 mat* mscalediv(mat* matrix, double divideby) {
     return mscale(1/divideby, matrix);
 }
+mat* mscaleadd(double scale, mat* matrix) {
+    mat *scaled = matrix_like(matrix);
+    for(unsigned int i = 0; i < matrix -> size; i++) {
+    	scaled -> data[i] = scale + matrix -> data[i];
+    }
+    return scaled;
+}
+mat* mscalesub(mat* matrix, double scale) {
+    mat *scaled = matrix_like(matrix);
+    for(unsigned int i = 0; i < matrix -> size; i++) {
+    	scaled -> data[i] = matrix -> data[i] - scale;
+    }
+    return scaled;
+}
 
 mat* madd(mat* a, mat* b) {
     assert(msame_shape(a, b));
