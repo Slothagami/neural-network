@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <math.h>
 #include "matrix.h"
 
 mat* fc_layer(mat* x, mat* weights, mat* bias) {
@@ -15,6 +16,7 @@ mat* fc_layer_back(mat* x, mat* weights, mat* bias, mat* out_error, double lr) {
     return in_error;
 }
 
+// Error Functions
 mat* mse_grad(mat* target, mat* pred) {
     // 2 * (prediction - target) / target.size
     return mscalediv(
@@ -37,4 +39,14 @@ double mse(mat* target, mat* pred) {
     mfree(square);
 
     return sum / square->size;
+}
+
+mat* mat_tanh(mat* x) {
+    return mmap(tanh, x);
+}
+
+mat* mat_tanh_grad(mat* x) {
+    // 1 - tanh(x)^2
+    mat* tanh_result = mat_tanh(x);
+    return mscaleadd(1, mscale(-1, mmult(tanh_result, tanh_result)));
 }

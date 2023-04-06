@@ -3,3 +3,6 @@ mat* fc_layer_back(mat* x, mat* weights, mat* bias, mat* out_error, double lr);
 
 double mse(mat* target, mat* pred);
 mat* mse_grad(mat* target, mat* pred);
+
+mat* mat_tanh(mat* x);
+mat* mat_tanh_grad(mat* x);
