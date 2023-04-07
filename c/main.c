@@ -4,10 +4,10 @@
 #include "nn.h"
 
 int main() {
+	// make network (mnist) - lr=.01, ((28*28, 100, 50, 10), Tanh)
 	mat *weights = rand_matrix(1, 2);
 	mat *bias    = rand_matrix(1, 1);
-
-	mat *input  = new_matrix(2, 1);
+	mat *input   = rand_matrix(2, 1);
 	mat *target = new_matrix(1, 1);
 	mfill(target, 1);
 
@@ -16,7 +16,6 @@ int main() {
 
 	for(int i = 0; i < 15; i++) {
 		out = fc_layer(input, weights, bias);
-		// printm(out);
 		printf("error: %f\n", mse(target, out));
 
 		error = mse_grad(target, out);

@@ -1,6 +1,31 @@
 #include <stdlib.h>
 #include <math.h>
 #include "matrix.h"
+#include "nn.h"
+
+// Network* make_simple_network(unsigned int *sizes, LayerFunc activation) {
+//     //eg: ((28*28, 100, 50, 10), Tanh)
+//     Network* net = malloc(sizeof(Network));
+
+// }
+
+Layer* make_layer(unsigned int in_size, unsigned int out_size, LayerFunc forward, LayerFunc backward) {
+    Layer* layer = malloc(sizeof(Layer));
+
+    layer -> forward  = forward;
+    layer -> backward = backward;
+
+    layer -> weights = rand_matrix(in_size, out_size);
+    layer -> biases  = rand_matrix(1, out_size);
+
+    return layer;
+}
+
+void free_layer(Layer* layer) {
+    mfree(layer -> weights);
+    mfree(layer -> biases);
+    free(layer);
+}
 
 mat* fc_layer(mat* x, mat* weights, mat* bias) {
     return madd(mdot(x, weights), bias);
