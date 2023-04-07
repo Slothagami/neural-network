@@ -1,5 +1,6 @@
 typedef mat* (*LayerFunc)(mat* x, mat* weights, mat* bias);
 typedef mat* (*GradFunc)(mat* x, mat* weights, mat* bias, mat* out_error, double lr);
+typedef mat* (*LossFunc)(mat* target, mat* pred);
 
 typedef struct {
     LayerFunc forward;
@@ -10,6 +11,7 @@ typedef struct {
 
 typedef struct {
     Layer *layers;
+    LossFunc loss;
     int num_layers;
 } Network;
 
