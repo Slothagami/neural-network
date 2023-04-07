@@ -3,11 +3,28 @@
 #include "matrix.h"
 #include "nn.h"
 
-// Network* make_simple_network(unsigned int *sizes, LayerFunc activation) {
-//     //eg: ((28*28, 100, 50, 10), Tanh)
-//     Network* net = malloc(sizeof(Network));
+Network* make_fc_network(unsigned int *sizes, LayerFunc activation, GradFunc activation_grad, LossFunc loss) {
+    //eg: ((28*28, 100, 50, 10), Tanh)
+    Network* net = malloc(sizeof(Network));
 
-// }
+    net -> loss = loss;
+    net -> num_layers = sizeof(sizes) / sizeof(unsigned int) - 1; // (-1) exclude the input, as its not a layer
+    net -> layers = malloc(sizeof(Layer) * net -> num_layers * 2); // times two because of activation layers
+
+    for(unsigned int i = 1; i <= net -> num_layers; i++) {
+        net -> layers[2 * (i - 1)] = make_layer(sizes[i-1], sizes[i], fc_layer, fc_layer_back);
+        net -> layers[2 * (i - 1) + 1] = make_activation_layer(activation, activation_grad);
+    }
+    return net;
+}
+
+void free_network(Network* net) {
+    for(unsigned int i = 0; i <= net -> num_layers * 2; i++) {
+        free_layer(net -> layers[i]);
+    }
+    free(net -> layers);
+    free(net);
+}
 
 mat* layer_forward(Layer* layer, mat* x) {
     return layer ->forward(x, layer -> weights, layer -> biases);
@@ -27,10 +44,20 @@ Layer* make_layer(unsigned int in_size, unsigned int out_size, LayerFunc forward
 
     return layer;
 }
+Layer* make_activation_layer(LayerFunc forward, GradFunc backward) {
+    Layer* layer = malloc(sizeof(Layer));
+
+    layer -> forward  = forward;
+    layer -> backward = backward;
+    layer -> weights = NULL;
+    layer -> biases  = NULL;
+
+    return layer;
+}
 
 void free_layer(Layer* layer) {
     mfree(layer -> weights);
-    mfree(layer -> biases);
+    mfree(layer -> biases );
     free(layer);
 }
 
@@ -73,12 +100,12 @@ double mse(mat* target, mat* pred) {
     return sum / square->size;
 }
 
-mat* mat_tanh(mat* x) {
+mat* mat_tanh(mat* x, mat* weights, mat* bias) {
     return mmap(tanh, x);
 }
 
-mat* mat_tanh_grad(mat* x) {
+mat* mat_tanh_grad(mat* x, mat* weights, mat* bias, mat* out_error, double lr) {
     // 1 - tanh(x)^2
-    mat* tanh_result = mat_tanh(x);
+    mat* tanh_result = mat_tanh(x, NULL, NULL);
     return mscaleadd(1, mscale(-1, mmult(tanh_result, tanh_result)));
 }
