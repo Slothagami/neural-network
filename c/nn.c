@@ -19,8 +19,14 @@ Network* make_fc_network(unsigned int *sizes, int num_layers, LayerFunc activati
     return net;
 }
 
-// mat* net_forward(Network net, mat* x) {
-//     for(int i = 0;)
+// mat* net_forward(Network* net, mat* input) {
+//     for(int i = 0; i < net -> num_layers; i++) {
+//         mat* new_input = layer_forward(net -> layers[i], input);
+//         mfree(input);
+//         input = new_input;
+//         mfree(new_input);
+//     }
+//     return input;
 // }
 
 void free_network(Network* net) {
