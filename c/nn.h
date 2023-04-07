@@ -1,8 +1,9 @@
 typedef mat* (*LayerFunc)(mat* x, mat* weights, mat* bias);
+typedef mat* (*GradFunc)(mat* x, mat* weights, mat* bias, mat* out_error, double lr);
 
 typedef struct {
     LayerFunc forward;
-    LayerFunc backward;
+    GradFunc backward;
     mat* weights;
     mat* biases;
 } Layer;
@@ -13,7 +14,9 @@ typedef struct {
 } Network;
 
 // Network make_simple_network(unsigned int *sizes, LayerFunc activation);
-Layer* make_layer(unsigned int in_size, unsigned int out_size, LayerFunc forward, LayerFunc backward);
+Layer* make_layer(unsigned int in_size, unsigned int out_size, LayerFunc forward, GradFunc backward);
+mat* layer_forward(Layer* layer, mat* x);
+void layer_back(Layer* layer, mat* x, mat* target, mat* out_error, double lr);
 
 void free_layer(Layer* layer);
 

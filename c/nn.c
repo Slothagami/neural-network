@@ -9,13 +9,20 @@
 
 // }
 
-Layer* make_layer(unsigned int in_size, unsigned int out_size, LayerFunc forward, LayerFunc backward) {
+mat* layer_forward(Layer* layer, mat* x) {
+    return layer ->forward(x, layer -> weights, layer -> biases);
+}
+void layer_back(Layer* layer, mat* x, mat* target, mat* out_error, double lr) {
+    layer -> backward(x, layer -> weights, layer -> biases, out_error, lr);
+}
+
+Layer* make_layer(unsigned int in_size, unsigned int out_size, LayerFunc forward, GradFunc backward) {
     Layer* layer = malloc(sizeof(Layer));
 
     layer -> forward  = forward;
     layer -> backward = backward;
 
-    layer -> weights = rand_matrix(in_size, out_size);
+    layer -> weights = rand_matrix(out_size, in_size);
     layer -> biases  = rand_matrix(1, out_size);
 
     return layer;

@@ -5,8 +5,8 @@
 
 int main() {
 	// make network (mnist) - lr=.01, ((28*28, 100, 50, 10), Tanh)
-	mat *weights = rand_matrix(1, 2);
-	mat *bias    = rand_matrix(1, 1);
+
+	Layer* layer = make_layer(2, 1, fc_layer, fc_layer_back);
 	mat *input   = rand_matrix(2, 1);
 	mat *target = new_matrix(1, 1);
 	mfill(target, 1);
@@ -15,15 +15,14 @@ int main() {
 	mat* error;
 
 	for(int i = 0; i < 15; i++) {
-		out = fc_layer(input, weights, bias);
+		out = layer_forward(layer, input);
 		printf("error: %f\n", mse(target, out));
 
 		error = mse_grad(target, out);
-		fc_layer_back(input, weights, bias, error, .1);
+		layer_back(layer, input, target, error, .1);
 	}
 
-	mfree(weights);
-	mfree(bias);
+	free_layer(layer);
 	mfree(input);
 	mfree(out);
 	mfree(target);
