@@ -15,7 +15,7 @@ typedef struct {
     int num_layers;
 } Network;
 
-Network* make_fc_network(unsigned int *sizes, LayerFunc activation, GradFunc activation_grad, LossFunc loss);
+Network* make_fc_network(unsigned int *sizes, int num_layers, LayerFunc activation, GradFunc activation_grad, LossFunc loss);
 Layer* make_layer(unsigned int in_size, unsigned int out_size, LayerFunc forward, GradFunc backward);
 Layer* make_activation_layer(LayerFunc forward, GradFunc backward);
 mat* layer_forward(Layer* layer, mat* x);

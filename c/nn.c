@@ -1,25 +1,30 @@
 #include <stdlib.h>
 #include <math.h>
+#include <stdio.h>
 #include "matrix.h"
 #include "nn.h"
 
-Network* make_fc_network(unsigned int *sizes, LayerFunc activation, GradFunc activation_grad, LossFunc loss) {
+Network* make_fc_network(unsigned int *sizes, int num_layers, LayerFunc activation, GradFunc activation_grad, LossFunc loss) {
     //eg: ((28*28, 100, 50, 10), Tanh)
     Network* net = malloc(sizeof(Network));
 
     net -> loss = loss;
-    net -> num_layers = sizeof(sizes) / sizeof(unsigned int) - 1; // (-1) exclude the input, as its not a layer
-    net -> layers = malloc(sizeof(Layer) * net -> num_layers * 2); // times two because of activation layers
+    net -> num_layers = 2 * num_layers; // include activation layes
+    net -> layers = malloc(sizeof(Layer*) * net -> num_layers); // times two because of activation layers
 
-    for(unsigned int i = 1; i <= net -> num_layers; i++) {
-        net -> layers[2 * (i - 1)] = make_layer(sizes[i-1], sizes[i], fc_layer, fc_layer_back);
-        net -> layers[2 * (i - 1) + 1] = make_activation_layer(activation, activation_grad);
+    for(int i = 1; i < net -> num_layers; i += 2) {
+        net -> layers[i - 1] = make_layer(sizes[i-1], sizes[i], fc_layer, fc_layer_back);
+        net -> layers[i] = make_activation_layer(activation, activation_grad);
     }
     return net;
 }
 
+// mat* net_forward(Network net, mat* x) {
+//     for(int i = 0;)
+// }
+
 void free_network(Network* net) {
-    for(unsigned int i = 0; i <= net -> num_layers * 2; i++) {
+    for(int i = 0; i < net -> num_layers; i++) {
         free_layer(net -> layers[i]);
     }
     free(net -> layers);
@@ -27,7 +32,7 @@ void free_network(Network* net) {
 }
 
 mat* layer_forward(Layer* layer, mat* x) {
-    return layer ->forward(x, layer -> weights, layer -> biases);
+    return layer -> forward(x, layer -> weights, layer -> biases);
 }
 void layer_back(Layer* layer, mat* x, mat* target, mat* out_error, double lr) {
     layer -> backward(x, layer -> weights, layer -> biases, out_error, lr);
@@ -69,8 +74,15 @@ mat* fc_layer_back(mat* x, mat* weights, mat* bias, mat* out_error, double lr) {
     mat *in_error = mdot(out_error, mtranspose(weights));
     mat *weights_error = mdot(mtranspose(x), out_error);
 
-    weights -> data = msub(weights, mscale(lr, weights_error)) -> data;
-    bias    -> data = msub(bias,    mscale(lr, out_error)) -> data;
+    mat* new_w = msub(weights, mscale(lr, weights_error));
+    mat* new_b = msub(bias,    mscale(lr,     out_error));
+
+    free(weights -> data);
+    free(bias    -> data);
+    mfree(weights_error);
+
+    weights -> data = new_w -> data;
+    bias    -> data = new_b -> data;
 
     return in_error;
 }
