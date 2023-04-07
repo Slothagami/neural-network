@@ -23,6 +23,7 @@ mat* rand_matrix(unsigned int width, unsigned int height) {
 }
 
 void mfree(mat* matrix) {
+    if(matrix == NULL) return;
     free(matrix -> data);
     free(matrix);
 }
