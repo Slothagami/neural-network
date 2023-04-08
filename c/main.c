@@ -13,13 +13,16 @@ int main() {
 	mfill(target, 1);
 
 	// Network struct test
-	unsigned int layers[] = {2, 1};
+	unsigned int layers[] = {2, 5, 1};
 	int num_layers = sizeof(layers) / sizeof(unsigned int) - 1; // len(layers) - 1
 	Network* net = make_fc_network(layers, num_layers, mat_tanh, mat_tanh_grad, mse_grad);
 
-	
+	// forward pass
+	mat* result = net_forward(net, input);
+	printm(result);
 
 	free_network(net);
+	mfree(result);
 
 
 	// Single Layer Test

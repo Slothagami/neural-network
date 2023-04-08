@@ -19,15 +19,15 @@ Network* make_fc_network(unsigned int *sizes, int num_layers, LayerFunc activati
     return net;
 }
 
-// mat* net_forward(Network* net, mat* input) {
-//     for(int i = 0; i < net -> num_layers; i++) {
-//         mat* new_input = layer_forward(net -> layers[i], input);
-//         mfree(input);
-//         input = new_input;
-//         mfree(new_input);
-//     }
-//     return input;
-// }
+mat* net_forward(Network* net, mat* input) {
+    mat* result = mcopy(input);
+    for(int i = 0; i < net -> num_layers; i++) {
+        mat* new_result = layer_forward(net -> layers[i], result);
+        mfree(result);
+        result = new_result;
+    }
+    return result;
+}
 
 void free_network(Network* net) {
     for(int i = 0; i < net -> num_layers; i++) {
@@ -51,7 +51,7 @@ Layer* make_layer(unsigned int in_size, unsigned int out_size, LayerFunc forward
     layer -> backward = backward;
 
     layer -> weights = rand_matrix(out_size, in_size);
-    layer -> biases  = rand_matrix(1, out_size);
+    layer -> biases  = rand_matrix(out_size, 1);
 
     return layer;
 }
@@ -73,7 +73,7 @@ void free_layer(Layer* layer) {
 }
 
 mat* fc_layer(mat* x, mat* weights, mat* bias) {
-    return madd(mdot(x, weights), bias);
+    return madd(mdot(x, weights), mtranspose(bias));
 }
 
 mat* fc_layer_back(mat* x, mat* weights, mat* bias, mat* out_error, double lr) {
