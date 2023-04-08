@@ -14,6 +14,14 @@ mat* new_matrix(unsigned int width, unsigned int height) {
     return matrix;
 }
 
+mat* mcopy(mat* matrix) {
+    mat* new = matrix_like(matrix);
+    for(unsigned int i = 0; i < matrix -> size; i++) {
+        new -> data[i] = matrix -> data[i];
+    }
+    return new;
+}
+
 mat* rand_matrix(unsigned int width, unsigned int height) {
     mat *matrix = new_matrix(width, height);
     for(unsigned int i = 0; i < width * height; i++) {
@@ -56,6 +64,8 @@ int msame_shape(mat* a, mat* b) {
 }
 
 mat* mdot(mat* a, mat* b) {
+    printf("%d %d\n", b -> height, a -> width);
+
     // assert the shapes can be multiplied
     assert(b -> height == a -> width);
 
