@@ -9,6 +9,7 @@ typedef struct {
 mat* new_matrix(unsigned int, unsigned int);
 mat* rand_matrix(unsigned int, unsigned int);
 mat* matrix_like(mat*);
+mat* mcopy(mat*);
 void mfree(mat*);
 
 // Operations
