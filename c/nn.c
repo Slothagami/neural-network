@@ -35,21 +35,24 @@ mat* net_forward(Network* net, mat* input) {
     }
     return result;
 }
-mat* net_backward(Network* net, mat* x, mat* output, mat* target, LossFunc loss) {
+void net_backward(Network* net, mat* x, mat* output, mat* target, LossFunc loss, double lr) {
     // backprop for each layer
     mat* error = loss(target, output); // initial error
-    for(int i = net -> num_layers-1; i >= 0; i--) {
-        
+    for(int i = net -> num_layers - 1; i >= 0; i--) {
+        // propogate the error
+        mat* new_error = layer_back(net -> layers[i], error, lr);
+        mfree(error);
+        error = new_error;
     }
     mfree(error);
-    return target;
 }
 
 mat* layer_forward(Layer* layer, mat* x) {
+    layer -> input = x;
     return layer -> forward(x, layer -> weights, layer -> biases);
 }
-void layer_back(Layer* layer, mat* x, mat* target, mat* out_error, double lr) {
-    layer -> backward(x, layer -> weights, layer -> biases, out_error, lr);
+mat* layer_back(Layer* layer, mat* out_error, double lr) {
+    return layer -> backward(layer -> input, layer -> weights, layer -> biases, out_error, lr);
 }
 
 Layer* make_layer(unsigned int in_size, unsigned int out_size, LayerFunc forward, GradFunc backward) {
@@ -60,6 +63,8 @@ Layer* make_layer(unsigned int in_size, unsigned int out_size, LayerFunc forward
 
     layer -> weights = rand_matrix(out_size, in_size);
     layer -> biases  = rand_matrix(1, out_size);
+
+    layer -> input = NULL;
 
     return layer;
 }
