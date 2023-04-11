@@ -64,8 +64,6 @@ int msame_shape(mat* a, mat* b) {
 }
 
 mat* mdot(mat* a, mat* b) {
-    printf("%d %d\n", b -> height, a -> width);
-
     // assert the shapes can be multiplied
     assert(b -> height == a -> width);
 

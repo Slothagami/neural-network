@@ -12,9 +12,9 @@ Network* make_fc_network(unsigned int *sizes, int num_layers, LayerFunc activati
     net -> num_layers = 2 * num_layers; // include activation layes
     net -> layers = malloc(sizeof(Layer*) * net -> num_layers); // times two because of activation layers
 
-    for(int i = 1; i < net -> num_layers; i += 2) {
-        net -> layers[i - 1] = make_layer(sizes[i-1], sizes[i], fc_layer, fc_layer_back);
-        net -> layers[i] = make_activation_layer(activation, activation_grad);
+    for(int i = 1; i < net -> num_layers - 1; i += 1) {
+        net -> layers[2*i - 2] = make_layer(sizes[i-1], sizes[i], fc_layer, fc_layer_back);
+        net -> layers[2*i - 1] = make_activation_layer(activation, activation_grad);
     }
     return net;
 }
@@ -51,7 +51,7 @@ Layer* make_layer(unsigned int in_size, unsigned int out_size, LayerFunc forward
     layer -> backward = backward;
 
     layer -> weights = rand_matrix(out_size, in_size);
-    layer -> biases  = rand_matrix(out_size, 1);
+    layer -> biases  = rand_matrix(1, out_size);
 
     return layer;
 }
