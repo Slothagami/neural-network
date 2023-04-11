@@ -5,7 +5,6 @@
 #include "nn.h"
 
 Network* make_fc_network(unsigned int *sizes, int num_layers, LayerFunc activation, GradFunc activation_grad, LossFunc loss) {
-    //eg: ((28*28, 100, 50, 10), Tanh)
     Network* net = malloc(sizeof(Network));
 
     net -> loss = loss;
@@ -19,6 +18,13 @@ Network* make_fc_network(unsigned int *sizes, int num_layers, LayerFunc activati
     }
     return net;
 }
+void free_network(Network* net) {
+    for(int i = 0; i < net -> num_layers; i++) {
+        free_layer(net -> layers[i]);
+    }
+    free(net -> layers);
+    free(net);
+}
 
 mat* net_forward(Network* net, mat* input) {
     mat* result = mcopy(input);
@@ -29,13 +35,12 @@ mat* net_forward(Network* net, mat* input) {
     }
     return result;
 }
-
-void free_network(Network* net) {
-    for(int i = 0; i < net -> num_layers; i++) {
-        free_layer(net -> layers[i]);
+mat* net_backward(Network* net, mat* x, mat* output, mat* target) {
+    // backprop for each layer
+    for(int i = net -> num_layers-1; i >= 0; i--) {
+        
     }
-    free(net -> layers);
-    free(net);
+    return target;
 }
 
 mat* layer_forward(Layer* layer, mat* x) {
@@ -76,7 +81,6 @@ void free_layer(Layer* layer) {
 mat* fc_layer(mat* x, mat* weights, mat* bias) {
     return madd(mdot(x, weights), mtranspose(bias));
 }
-
 mat* fc_layer_back(mat* x, mat* weights, mat* bias, mat* out_error, double lr) {
     mat *in_error = mdot(out_error, mtranspose(weights));
     mat *weights_error = mdot(mtranspose(x), out_error);
@@ -102,7 +106,6 @@ mat* mse_grad(mat* target, mat* pred) {
         target -> size
     );
 }
-
 double mse(mat* target, mat* pred) {
     // mean((target - pred)^2)
     mat* diff = msub(pred, target);
@@ -122,7 +125,6 @@ double mse(mat* target, mat* pred) {
 mat* mat_tanh(mat* x, mat* weights, mat* bias) {
     return mmap(tanh, x);
 }
-
 mat* mat_tanh_grad(mat* x, mat* weights, mat* bias, mat* out_error, double lr) {
     // 1 - tanh(x)^2
     mat* tanh_result = mat_tanh(x, NULL, NULL);
