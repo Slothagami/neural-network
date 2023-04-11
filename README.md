@@ -8,14 +8,10 @@ An Neural Network Libary, made completely from scratch using python and C. My ai
 
 ### C TODO (Long)
 - loading, and automatic saving, of trained models
-- Fully Connected Layers
 - Convolutional Layers
 - Softmax
 - Sigmoid Activation
-- Tanh Activation
 - ReLU Activation
-- Custom layer types
-- Custom Activations and Loss functions
 - Mean Squared Error loss
 - Categorical Cross Entropy loss
 - update pooling layer for multiple color channels

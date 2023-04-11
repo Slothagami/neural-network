@@ -12,6 +12,7 @@ Network* make_fc_network(unsigned int *sizes, int num_layers, LayerFunc activati
     net -> num_layers = 2 * num_layers; // include activation layes
     net -> layers = malloc(sizeof(Layer*) * net -> num_layers); // times two because of activation layers
 
+    // alternating FC and activation layers
     for(int i = 1; i < net -> num_layers - 1; i += 1) {
         net -> layers[2*i - 2] = make_layer(sizes[i-1], sizes[i], fc_layer, fc_layer_back);
         net -> layers[2*i - 1] = make_activation_layer(activation, activation_grad);
