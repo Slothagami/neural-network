@@ -23,7 +23,7 @@ int main() {
 
 	// backward pass
 	double error = mse(target, result);
-	printf("Error: %f", error);
+	printf("Error: %f\n", error);
 	net_backward(net, input, result, target, mse_grad, .01);
 
 	free_network(net);

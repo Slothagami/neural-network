@@ -82,6 +82,7 @@ Layer* make_activation_layer(LayerFunc forward, GradFunc backward) {
 void free_layer(Layer* layer) {
     mfree(layer -> weights);
     mfree(layer -> biases );
+    mfree(layer -> input  );
     free(layer);
 }
 
