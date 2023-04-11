@@ -30,4 +30,5 @@ mat* mtranspose(mat*);
 // Misc
 void mfill(mat*, double);
 void printm(mat*);
+void printmshape(mat* matrix);
 int msame_shape(mat*, mat*);
