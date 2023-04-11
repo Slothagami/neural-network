@@ -1,5 +1,5 @@
 # Neural Netwok
-An Neural Network Libary, made completely from scratch using python and C. My aim is to create a diffusion model to generate images completely from zero.
+An Neural Network Libary, made completely from scratch in C.
 
 ### C TODO (Short term)
 - make nn libary (standard FC model)
@@ -12,7 +12,6 @@ An Neural Network Libary, made completely from scratch using python and C. My ai
 - Softmax
 - Sigmoid Activation
 - ReLU Activation
-- Mean Squared Error loss
 - Categorical Cross Entropy loss
 - update pooling layer for multiple color channels
 - UNets

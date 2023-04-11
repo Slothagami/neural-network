@@ -25,7 +25,7 @@ mat* mcopy(mat* matrix) {
 mat* rand_matrix(unsigned int width, unsigned int height) {
     mat *matrix = new_matrix(width, height);
     for(unsigned int i = 0; i < width * height; i++) {
-        matrix -> data[i] = (float) rand() / RAND_MAX;
+        matrix -> data[i] = (float) rand() / RAND_MAX * 2 - 1;
     }
     return matrix;
 }
