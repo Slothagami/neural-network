@@ -35,11 +35,13 @@ mat* net_forward(Network* net, mat* input) {
     }
     return result;
 }
-mat* net_backward(Network* net, mat* x, mat* output, mat* target) {
+mat* net_backward(Network* net, mat* x, mat* output, mat* target, LossFunc loss) {
     // backprop for each layer
+    mat* error = loss(target, output); // initial error
     for(int i = net -> num_layers-1; i >= 0; i--) {
         
     }
+    mfree(error);
     return target;
 }
 

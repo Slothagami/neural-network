@@ -19,12 +19,12 @@ int main() {
 
 	// forward pass
 	mat* result = net_forward(net, input);
-	double e = mse(target, result);
 	printm(result);
-	printf("Error: %f", e);
 
 	// backward pass
-	net_backward(net, input, result, target);
+	double error = mse(target, result);
+	printf("Error: %f", error);
+	net_backward(net, input, result, target, mse_grad);
 
 	free_network(net);
 	mfree(result);
