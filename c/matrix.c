@@ -58,7 +58,8 @@ void printm(mat* matrix) {
     printf("\n");
 }
 void printmshape(mat* matrix) {
-    printf("(%d, %d)\n", matrix -> width, matrix -> height);
+    if(matrix == NULL) return;
+    printf("(%d, %d)\n", matrix -> height, matrix -> width);
 }
 
 int msame_shape(mat* a, mat* b) {

@@ -136,5 +136,8 @@ mat* mat_tanh(mat* x, mat* weights, mat* bias) {
 mat* mat_tanh_grad(mat* x, mat* weights, mat* bias, mat* out_error, double lr) {
     // 1 - tanh(x)^2
     mat* tanh_result = mat_tanh(x, NULL, NULL);
-    return mscaleadd(1, mscale(-1, mmult(tanh_result, tanh_result)));
+    return mmult(
+        mscaleadd(1, mscale(-1, mmult(tanh_result, tanh_result))), 
+        out_error
+    );
 }

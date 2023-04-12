@@ -12,16 +12,16 @@ int main() {
 	mat *target = new_matrix(1, 1);
 	mfill(target, 0);
 
-	// Network struct test
+	// Network test
 	unsigned int layers[] = {2, 3, 1};
 	int num_layers = sizeof(layers) / sizeof(unsigned int) - 1; // len(layers) - 1
 	Network* net = make_fc_network(layers, num_layers, mat_tanh, mat_tanh_grad, mse_grad);
 
-	// forward pass
+	// forward
 	mat* result = net_forward(net, input);
 	printm(result);
 
-	// backward pass
+	// backward
 	double error = mse(target, result);
 	printf("Error: %f\n", error);
 	net_backward(net, input, result, target, mse_grad, .01);
