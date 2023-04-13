@@ -16,3 +16,4 @@ A machine learning libary, made completely from scratch.
     - UNets
     - Diffusion Model
     - Transformer Language model
+        - Discord chatbot

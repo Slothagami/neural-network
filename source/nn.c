@@ -92,22 +92,38 @@ void free_layer(Layer* layer) {
 }
 
 mat* fc_layer(mat* x, mat* weights, mat* bias) {
-    return madd(mdot(x, weights), mtranspose(bias));
+    mat* dot    = mdot(x, weights);
+    mat* bias_T = mtranspose(bias);
+    mat* result = madd(dot, bias_T);
+
+    mfree(dot);
+    mfree(bias_T);
+    return result;
 }
 mat* fc_layer_back(mat* x, mat* weights, mat* bias, mat* out_error, double lr) {
-    mat *in_error = mdot(out_error, mtranspose(weights));
-    mat *weights_error = mdot(mtranspose(x), out_error);
+    mat* weights_T     = mtranspose(weights);
+    mat* x_T           = mtranspose(x);
+    mat *in_error      = mdot(out_error, weights_T);
+    mat *weights_error = mdot(x_T,       out_error);
 
-    mat* new_w = msub(weights, mscale(lr, weights_error));
-    mat* new_b = msub(bias,    mscale(lr,     out_error));
+    mat* scaled_w = mscale(lr, weights_error);
+    mat* scaled_e = mscale(lr,     out_error);
+    mat* new_w    = msub(weights, scaled_w);
+    mat* new_b    = msub(bias,    scaled_e);
 
-    mfree(weights_error);
+    free(weights -> data);
+    free(bias    -> data);
 
     weights -> data = new_w -> data;
     bias    -> data = new_b -> data;
 
+    mfree(weights_error);
     mfree(new_w);
     mfree(new_b);
+    mfree(scaled_w);
+    mfree(scaled_e);
+    mfree(x_T);
+    mfree(weights_T);
 
     return in_error;
 }
@@ -115,10 +131,13 @@ mat* fc_layer_back(mat* x, mat* weights, mat* bias, mat* out_error, double lr) {
 // Error Functions
 mat* mse_grad(mat* target, mat* pred) {
     // 2 * (prediction - target) / target.size
-    return mscalediv(
-        mscale(2, msub(pred, target)),
-        target -> size
-    );
+    mat* difference        = msub(pred, target);
+    mat* difference_double = mscale(2, difference);
+    mat* result            = mscalediv(difference_double, target -> size);
+
+    mfree(difference);
+    mfree(difference_double);
+    return result;
 }
 double mse(mat* target, mat* pred) {
     // mean((target - pred)^2)
@@ -142,9 +161,15 @@ mat* mat_tanh(mat* x, mat* weights, mat* bias) {
 }
 mat* mat_tanh_grad(mat* x, mat* weights, mat* bias, mat* out_error, double lr) {
     // 1 - tanh(x)^2
-    mat* tanh_result = mat_tanh(x, NULL, NULL);
-    return mmult(
-        mscaleadd(1, mscale(-1, mmult(tanh_result, tanh_result))), 
-        out_error
-    );
+    mat* tanh_result       = mat_tanh(x, NULL, NULL);
+    mat* tanh_squared      = mmult(tanh_result, tanh_result);
+    mat* negative          = mscale(-1, tanh_squared);
+    mat* negative_plus_one = mscaleadd(1, negative);
+    mat* result            = mmult(negative_plus_one, out_error);
+
+    mfree(tanh_result);
+    mfree(tanh_squared);
+    mfree(negative);
+    mfree(negative_plus_one);
+    return result;
 }
