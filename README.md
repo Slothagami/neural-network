@@ -5,6 +5,7 @@ A machine learning libary, made completely from scratch.
 - General
     - python wrapper
     - c equivalent of python implimentation
+    - batch derivatives
     - loading, and automatic saving, of trained models
 - Activation & loss
     - Softmax

@@ -19,15 +19,15 @@ int main() {
 	// training loop
 	mat* result;
 	mat* input;
-	for(int i = 0; i < 20; i++) {
+	for(int i = 0; i < 40; i++) {
 		// forward
-		input  = rand_matrix(2, 1);
+		input = rand_matrix(2, 1);
 		result = net_forward(net, input);
 
 		// backward
 		double error = mse(target, result);
-		printf("Error: %f\n", error);
-		net_backward(net, input, result, target, mse_grad, .0001);
+		printf("Epoch %d, Error: %f\n", i, error);
+		net_backward(net, input, result, target, mse_grad, .01);
 	}
 
 	free_network(net);
