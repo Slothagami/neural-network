@@ -18,7 +18,6 @@ labels = np.array([
 ])
 
 nn = NeuralNet(lr=.1)
-
 nn.config((2, 3, 1), Tanh)
 nn.train(batches, labels, 500)
 
