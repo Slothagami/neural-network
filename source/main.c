@@ -21,7 +21,7 @@ int main() {
 	mat* input;
 	for(int i = 0; i < 40; i++) {
 		// forward
-		input = rand_matrix(2, 1);
+		input  = rand_matrix(2, 1);
 		result = net_forward(net, input);
 
 		// backward
