@@ -4,8 +4,7 @@ A machine learning libary, made completely from scratch.
 ### Planned features
 - General
     - batch derivatives
-    - loading of training data
-    - loading, and automatic saving, of trained models
+    - save/load of trained models (and their layers)
     - python wrapper
     - c equivalent of python implimentation
 - Activation & loss
