@@ -4,6 +4,24 @@
 #include "../include/matrix.h"
 #include "../include/nn.h"
 
+void net_train(Network* net, DispErrorFunc errorFunc, LossFunc loss, mat** batch, mat** labels, int samples, int epochs, double lr, int interval) {
+    mat* result;
+    double error_sum;
+    for(int epoch = 0; epoch < epochs; epoch++) {
+        error_sum = 0;
+        for(int sample = 0; sample < samples; sample++) {
+            result = net_forward(net, batch[sample]);
+
+            // backward
+            error_sum += errorFunc(labels[sample], result);
+            net_backward(net, batch[sample], result, labels[sample], loss, lr);
+        }
+
+        if((epoch + 1) % interval == 0) printf("Epoch %d, Error: %f\n", epoch + 1, error_sum / samples);
+    }
+	mfree(result);
+}
+
 Network* make_fc_network(unsigned int *sizes, int num_layers, LayerFunc activation, GradFunc activation_grad, LossFunc loss) {
     Network* net = malloc(sizeof(Network));
     if(net == NULL) return NULL;

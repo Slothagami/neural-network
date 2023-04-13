@@ -3,8 +3,7 @@ A machine learning libary, made completely from scratch.
 
 ### Planned features
 - General
-    - net_train function
-        - batch derivatives
+    - batch derivatives
     - loading of training data
     - loading, and automatic saving, of trained models
     - python wrapper

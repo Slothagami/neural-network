@@ -55,7 +55,6 @@ void printm(mat* matrix) {
     	}
         printf("]\n");
     }
-    printf("\n");
 }
 void printmshape(mat* matrix) {
     if(matrix == NULL) return;
