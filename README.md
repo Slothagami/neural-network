@@ -1,5 +1,5 @@
-# Neural Netwok
-An Neural Network Libary, made completely from scratch in C.
+# br*AI*n
+A machine learning libary, made completely from scratch.
 
 ### Planned features
 - General

@@ -1,8 +1,8 @@
 #include <stdlib.h>
 #include <math.h>
 #include <stdio.h>
-#include "matrix.h"
-#include "nn.h"
+#include "include/matrix.h"
+#include "include/nn.h"
 
 Network* make_fc_network(unsigned int *sizes, int num_layers, LayerFunc activation, GradFunc activation_grad, LossFunc loss) {
     Network* net = malloc(sizeof(Network));
