@@ -54,7 +54,7 @@ void net_backward(Network* net, mat* x, mat* output, mat* target, LossFunc loss,
 }
 
 mat* layer_forward(Layer* layer, mat* x) {
-    layer -> input = x;
+    layer -> input = mcopy(x);
     return layer -> forward(x, layer -> weights, layer -> biases);
 }
 mat* layer_back(Layer* layer, mat* out_error, double lr) {

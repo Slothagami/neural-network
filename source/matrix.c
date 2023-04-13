@@ -159,6 +159,7 @@ mat* mdiv(mat* a, mat* b) {
 }
 
 mat* mmap(double (*func)(double), mat* matrix) {
+    assert(matrix != NULL);
     mat *map = matrix_like(matrix);
     for(unsigned int i = 0; i < matrix -> size; i++) {
     	map -> data[i] = func(matrix -> data[i]);
