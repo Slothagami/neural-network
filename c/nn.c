@@ -6,10 +6,15 @@
 
 Network* make_fc_network(unsigned int *sizes, int num_layers, LayerFunc activation, GradFunc activation_grad, LossFunc loss) {
     Network* net = malloc(sizeof(Network));
+    if(net == NULL) return NULL;
 
     net -> loss = loss;
     net -> num_layers = 2 * num_layers; // include activation layes
     net -> layers = malloc(sizeof(Layer*) * net -> num_layers); // times two because of activation layers
+    if(net -> layers == NULL) { // if allocation fails
+        free(net);
+        return NULL;
+    }
 
     // alternating FC and activation layers
     for(int i = 1; i < net -> num_layers - 1; i += 1) {
@@ -19,6 +24,7 @@ Network* make_fc_network(unsigned int *sizes, int num_layers, LayerFunc activati
     return net;
 }
 void free_network(Network* net) {
+    if(net == NULL) return;
     for(int i = 0; i < net -> num_layers; i++) {
         free_layer(net -> layers[i]);
     }
@@ -78,7 +84,6 @@ Layer* make_activation_layer(LayerFunc forward, GradFunc backward) {
 
     return layer;
 }
-
 void free_layer(Layer* layer) {
     mfree(layer -> weights);
     mfree(layer -> biases );
@@ -96,12 +101,13 @@ mat* fc_layer_back(mat* x, mat* weights, mat* bias, mat* out_error, double lr) {
     mat* new_w = msub(weights, mscale(lr, weights_error));
     mat* new_b = msub(bias,    mscale(lr,     out_error));
 
-    free(weights -> data);
-    free(bias    -> data);
     mfree(weights_error);
 
     weights -> data = new_w -> data;
     bias    -> data = new_b -> data;
+
+    mfree(new_w);
+    mfree(new_b);
 
     return in_error;
 }
@@ -124,10 +130,11 @@ double mse(mat* target, mat* pred) {
         sum += square->data[i];
     }
 
+    unsigned int size = square -> size; // can't use the size after its freed
     mfree(diff);
     mfree(square);
 
-    return sum / square->size;
+    return sum / size;
 }
 
 mat* mat_tanh(mat* x, mat* weights, mat* bias) {

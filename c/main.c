@@ -28,6 +28,8 @@ int main() {
 
 	free_network(net);
 	mfree(result);
+	mfree(input);
+	mfree(target);
 
 	return 0;
 }
