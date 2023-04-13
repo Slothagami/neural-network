@@ -26,6 +26,7 @@ Network* make_fc_network(unsigned int *sizes, int num_layers, LayerFunc activati
 void free_network(Network* net) {
     if(net == NULL) return;
     for(int i = 0; i < net -> num_layers; i++) {
+        if(net -> layers[i] == NULL) continue;
         free_layer(net -> layers[i]);
     }
     free(net -> layers);
@@ -85,9 +86,9 @@ Layer* make_activation_layer(LayerFunc forward, GradFunc backward) {
     return layer;
 }
 void free_layer(Layer* layer) {
-    mfree(layer -> weights);
-    mfree(layer -> biases );
-    mfree(layer -> input  );
+    if(layer -> weights != NULL) mfree(layer -> weights);
+    if(layer -> biases  != NULL) mfree(layer -> biases );
+    if(layer -> input   != NULL) mfree(layer -> input  );
     free(layer);
 }
 
@@ -108,18 +109,27 @@ mat* fc_layer_back(mat* x, mat* weights, mat* bias, mat* out_error, double lr) {
 
     mat* scaled_w = mscale(lr, weights_error);
     mat* scaled_e = mscale(lr,     out_error);
-    mat* new_w    = msub(weights, scaled_w);
-    mat* new_b    = msub(bias,    scaled_e);
 
-    free(weights -> data);
-    free(bias    -> data);
+    mat* scaled_e_T = mtranspose(scaled_e);
+    mat* new_w    = msub(weights, scaled_w);
+    mat* new_b    = msub(bias,    scaled_e_T);
+
+    mfree(scaled_e_T);
+
+    // freeing the weights data on its own results in the new data being freed when calling mfree(new_w/b) so 
+    // swapping them so the right ones get freed
+    double* weights_dat = weights -> data;
+    double* bias_dat    = bias    -> data;
 
     weights -> data = new_w -> data;
     bias    -> data = new_b -> data;
 
+    new_w -> data = weights_dat;
+    new_b -> data = bias_dat;
+
     mfree(weights_error);
-    mfree(new_w);
-    mfree(new_b);
+    mfree(new_w); // also frees weights -> data since its the same pointer
+    mfree(new_b); // also frees bias    -> data since its the same pointer
     mfree(scaled_w);
     mfree(scaled_e);
     mfree(x_T);
