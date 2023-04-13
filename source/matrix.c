@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
-#include "include/matrix.h"
+#include "../include/matrix.h"
 
 mat* new_matrix(unsigned int width, unsigned int height) {
 	mat *matrix = malloc(sizeof(mat));
