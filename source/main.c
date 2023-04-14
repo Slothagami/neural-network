@@ -25,14 +25,16 @@ int main() {
 	mat* batch[] = {a, b, c, d};
 
 	// labels
-	mat* one  = new_matrix(1, 1);
-	mat* zero = new_matrix(1, 1);
-	mfill(one,  1);
+	mat* one  = new_matrix(2, 1);
+	mat* zero = new_matrix(2, 1);
+	mfill(one,  0);
 	mfill(zero, 0);
+	zero -> data[1] = 1;
+	one  -> data[0] = 1;
 	mat* labels[] = {zero, one, one, zero};
 
 	// train network
-	unsigned int layers[] = {2, 3, 1};
+	unsigned int layers[] = {2, 3, 2};
 	int num_layers = sizeof(layers) / sizeof(unsigned int) - 1; // len(layers) - 1
 	Network* net = make_fc_network(layers, num_layers, mat_tanh, mat_tanh_grad, mse_grad);
 

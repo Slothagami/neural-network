@@ -3,7 +3,7 @@ A machine learning libary, made completely from scratch.
 
 ### Planned features
 - General
-    - TEST SOFTMAX LAYER
+    - Fix computer crash on softmax layer
     - batch derivatives
     - save/load of trained models (and their layers)
     - python wrapper
