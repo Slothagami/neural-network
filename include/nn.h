@@ -9,6 +9,7 @@ typedef struct {
     mat* weights;
     mat* biases;
     mat* input;
+    mat* output;
 } Layer;
 
 typedef struct {

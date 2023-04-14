@@ -91,7 +91,8 @@ Layer* make_layer(unsigned int in_size, unsigned int out_size, LayerFunc forward
     layer -> weights = rand_matrix(out_size, in_size);
     layer -> biases  = rand_matrix(1, out_size);
 
-    layer -> input = NULL;
+    layer -> input  = NULL;
+    layer -> output = NULL;
 
     return layer;
 }
@@ -100,8 +101,11 @@ Layer* make_activation_layer(LayerFunc forward, GradFunc backward) {
 
     layer -> forward  = forward;
     layer -> backward = backward;
+
     layer -> weights = NULL;
     layer -> biases  = NULL;
+    layer -> input   = NULL;
+    layer -> output  = NULL;
 
     return layer;
 }
