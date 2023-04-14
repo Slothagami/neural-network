@@ -174,7 +174,23 @@ mat* softmax_layer(Layer* layer, mat* x) {
     return result;
 }
 mat* softmax_layer_back(Layer* layer, mat* out_error, double lr) {
-    // mat* tmp = mvstack()
+    mat* tmp = mvtile(layer -> output, layer -> output -> size);
+    mat* out_error_T = mtranspose(out_error);
+    mat* tmp_T       = mtranspose(tmp);
+
+    mat* identity = midentity(layer -> output -> size);
+    mat* difference = msub(identity, tmp_T);
+    mat* scaled     = mmult(tmp, difference);
+
+    mat* result = mdot(scaled, out_error_T);
+
+    mfree(tmp);
+    mfree(out_error_T);
+    mfree(tmp_T);
+    mfree(identity);
+    mfree(difference);
+    mfree(scaled);
+    return result;
 }
 
 // Error Functions //

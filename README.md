@@ -7,8 +7,6 @@ A machine learning libary, made completely from scratch.
     - save/load of trained models (and their layers)
     - python wrapper
     - c equivalent of python implimentation
-- Activation & loss
-    - Softmax layer
     - Categorical Cross Entropy loss
 - Models
     - ConvNet

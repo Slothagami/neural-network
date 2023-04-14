@@ -115,12 +115,23 @@ double msum(mat* matrix) {
     return sum;
 }
 
-mat* mvstack(mat* matrix, unsigned int height) {
+mat* mvtile(mat* matrix, unsigned int height) {
     assert(matrix -> width == 1 || matrix -> height == 1); // assumes 2d matrix dimensions
     unsigned int size = max(matrix -> width, matrix -> height);
     mat* result = new_matrix(size, height);
     for(unsigned int i = 0; i < result -> size; i++) {
         result -> data[i] = matrix -> data[i % size];
+    }
+    return result;
+}
+
+mat* midentity(unsigned int size) {
+    mat* result = new_matrix(size, size);
+    mfill(result, 0);
+
+    // add the 1's on the diagonal
+    for(unsigned int i = 0; i < size; i++) {
+        result -> data[i * size + i] = 1;
     }
     return result;
 }
