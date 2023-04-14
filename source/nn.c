@@ -224,3 +224,21 @@ mat* mat_relu_grad(mat* x, mat* weights, mat* bias, mat* out_error, double lr) {
     mfree(d_relu);
     return result;
 }
+
+double sigmoid(double x) {
+    return 1/(1 + exp(-x));
+}
+double sigmoid_grad(double x) {
+    double sig = sigmoid(x);
+    return sig * (1 - sig);
+}
+mat* mat_sigmoid(mat* x, mat* weights, mat* bias) {
+    return mmap(sigmoid, x);
+}
+mat* mat_sigmoid_grad(mat* x, mat* weights, mat* bias, mat* out_error, double lr) {
+    mat* d_sig  = mmap(sigmoid_grad, x);
+    mat* result = mmult(d_sig, out_error);
+
+    mfree(d_sig);
+    return result;
+}

@@ -9,7 +9,6 @@ A machine learning libary, made completely from scratch.
     - c equivalent of python implimentation
 - Activation & loss
     - Softmax
-    - Sigmoid Activation
     - Categorical Cross Entropy loss
 - Models
     - ConvNet

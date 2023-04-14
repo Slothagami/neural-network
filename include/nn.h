@@ -44,3 +44,8 @@ double relu(double x);
 double relu_grad(double x);
 mat* mat_relu(mat* x, mat* weights, mat* bias);
 mat* mat_relu_grad(mat* x, mat* weights, mat* bias, mat* out_error, double lr);
+
+double sigmoid(double x);
+double sigmoid_grad(double x);
+mat* mat_sigmoid(mat* x, mat* weights, mat* bias);
+mat* mat_sigmoid_grad(mat* x, mat* weights, mat* bias, mat* out_error, double lr);
