@@ -75,12 +75,10 @@ void net_backward(Network* net, mat* x, mat* output, mat* target, LossFunc loss,
 
 mat* layer_forward(Layer* layer, mat* x) {
     layer -> input = mcopy(x);
-    mat* output = layer -> forward(x, layer -> weights, layer -> biases);
-    layer -> output = output; // only needed for softmax, find better solution, input layer to forward methods instead?
-    return output;
+    return layer -> forward(layer, x);
 }
 mat* layer_back(Layer* layer, mat* out_error, double lr) {
-    return layer -> backward(layer -> input, layer -> weights, layer -> biases, out_error, lr);
+    return layer -> backward(layer, out_error, lr);
 }
 
 // Layer Types //
@@ -118,18 +116,18 @@ void free_layer(Layer* layer) {
     free(layer);
 }
 
-mat* fc_layer(mat* x, mat* weights, mat* bias) {
-    mat* dot    = mdot(x, weights);
-    mat* bias_T = mtranspose(bias);
+mat* fc_layer(Layer* layer, mat* x) {
+    mat* dot    = mdot(x, layer -> weights);
+    mat* bias_T = mtranspose(layer -> biases);
     mat* result = madd(dot, bias_T);
 
     mfree(dot);
     mfree(bias_T);
     return result;
 }
-mat* fc_layer_back(mat* x, mat* weights, mat* bias, mat* out_error, double lr) {
-    mat* weights_T     = mtranspose(weights);
-    mat* x_T           = mtranspose(x);
+mat* fc_layer_back(Layer* layer, mat* out_error, double lr) {
+    mat* weights_T     = mtranspose(layer -> weights);
+    mat* x_T           = mtranspose(layer -> input);
     mat *in_error      = mdot(out_error, weights_T);
     mat *weights_error = mdot(x_T,       out_error);
 
@@ -137,18 +135,18 @@ mat* fc_layer_back(mat* x, mat* weights, mat* bias, mat* out_error, double lr) {
     mat* scaled_e = mscale(lr,     out_error);
 
     mat* scaled_e_T = mtranspose(scaled_e);
-    mat* new_w    = msub(weights, scaled_w);
-    mat* new_b    = msub(bias,    scaled_e_T);
+    mat* new_w    = msub(layer -> weights,  scaled_w);
+    mat* new_b    = msub(layer -> biases, scaled_e_T);
 
     mfree(scaled_e_T);
 
     // freeing the weights data on its own results in the new data being freed when calling mfree(new_w/b) so 
     // swapping them so the right ones get freed
-    double* weights_dat = weights -> data;
-    double* bias_dat    = bias    -> data;
+    double* weights_dat = layer -> weights -> data;
+    double* bias_dat    = layer -> biases  -> data;
 
-    weights -> data = new_w -> data;
-    bias    -> data = new_b -> data;
+    layer -> weights -> data = new_w -> data;
+    layer -> biases  -> data = new_b -> data;
 
     new_w -> data = weights_dat;
     new_b -> data = bias_dat;
@@ -164,7 +162,7 @@ mat* fc_layer_back(mat* x, mat* weights, mat* bias, mat* out_error, double lr) {
     return in_error;
 }
 
-mat* softmax_layer(mat* x, mat* weights, mat* bias) {
+mat* softmax_layer(Layer* layer, mat* x) {
     double max = mmax(x);
     mat* shift = mscalesub(x, max); // shift values down to avoid overflow
     mat* exp_x = mmap(exp, shift);
@@ -172,9 +170,10 @@ mat* softmax_layer(mat* x, mat* weights, mat* bias) {
 
     mfree(shift);
     mfree(exp_x);
+    layer -> output = mcopy(result);
     return result;
 }
-mat* softmax_layer_back(mat* x, mat* weights, mat* bias, mat* out_error, double lr) {
+mat* softmax_layer_back(Layer* layer, mat* out_error, double lr) {
     // mat* tmp = mvstack()
 }
 
@@ -207,12 +206,12 @@ double mse(mat* target, mat* pred) {
 }
 
 // Activations //
-mat* mat_tanh(mat* x, mat* weights, mat* bias) {
+mat* mat_tanh(Layer* layer, mat* x) {
     return mmap(tanh, x);
 }
-mat* mat_tanh_grad(mat* x, mat* weights, mat* bias, mat* out_error, double lr) {
+mat* mat_tanh_grad(Layer* layer, mat* out_error, double lr) {
     // 1 - tanh(x)^2
-    mat* tanh_result       = mat_tanh(x, NULL, NULL);
+    mat* tanh_result       = mat_tanh(NULL, layer -> input);
     mat* tanh_squared      = mmult(tanh_result, tanh_result);
     mat* negative          = mscale(-1, tanh_squared);
     mat* negative_plus_one = mscaleadd(1, negative);
@@ -234,11 +233,11 @@ double relu(double x) {
 double relu_grad(double x) {
     return (x > 0)? 1: 0;
 }
-mat* mat_relu(mat* x, mat* weights, mat* bias) {
+mat* mat_relu(Layer* layer, mat* x) {
     return mmap(relu, x);
 }
-mat* mat_relu_grad(mat* x, mat* weights, mat* bias, mat* out_error, double lr) {
-    mat* d_relu = mmap(relu_grad, x);
+mat* mat_relu_grad(Layer* layer, mat* out_error, double lr) {
+    mat* d_relu = mmap(relu_grad, layer -> input);
     mat* result = mmult(d_relu, out_error);
 
     mfree(d_relu);
@@ -252,11 +251,11 @@ double sigmoid_grad(double x) {
     double sig = sigmoid(x);
     return sig * (1 - sig);
 }
-mat* mat_sigmoid(mat* x, mat* weights, mat* bias) {
+mat* mat_sigmoid(Layer* layer, mat* x) {
     return mmap(sigmoid, x);
 }
-mat* mat_sigmoid_grad(mat* x, mat* weights, mat* bias, mat* out_error, double lr) {
-    mat* d_sig  = mmap(sigmoid_grad, x);
+mat* mat_sigmoid_grad(Layer* layer, mat* out_error, double lr) {
+    mat* d_sig  = mmap(sigmoid_grad, layer -> input);
     mat* result = mmult(d_sig, out_error);
 
     mfree(d_sig);

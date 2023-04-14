@@ -1,16 +1,18 @@
-typedef mat* (*LayerFunc)(mat* x, mat* weights, mat* bias);
-typedef mat* (*GradFunc)(mat* x, mat* weights, mat* bias, mat* out_error, double lr);
+typedef struct Layer Layer;
+
+typedef mat* (*LayerFunc)(Layer* layer, mat* x);
+typedef mat* (*GradFunc)(Layer* layer, mat* out_error, double lr);
 typedef mat* (*LossFunc)(mat* target, mat* pred);
 typedef double (*DispErrorFunc)(mat* target, mat* pred);
 
-typedef struct {
+struct Layer {
     LayerFunc forward;
     GradFunc backward;
     mat* weights;
     mat* biases;
     mat* input;
     mat* output;
-} Layer;
+};
 
 typedef struct {
     Layer **layers;
@@ -33,27 +35,27 @@ mat* layer_back(Layer* layer, mat* out_error, double lr);
 void free_layer(Layer*);
 void free_network(Network*);
 
-mat* fc_layer(mat* x, mat* weights, mat* bias);
-mat* fc_layer_back(mat* x, mat* weights, mat* bias, mat* out_error, double lr);
+mat* fc_layer(Layer* layer, mat* x);
+mat* fc_layer_back(Layer* layer, mat* out_error, double lr);
 
-mat* softmax_layer(mat* x, mat* weights, mat* bias);
-mat* softmax_layer_back(mat* x, mat* weights, mat* bias, mat* out_error, double lr);
+mat* softmax_layer(Layer* layer, mat* x);
+mat* softmax_layer_back(Layer* layer, mat* out_error, double lr);
 
 // Error Functions //
 double mse(mat* target, mat* pred);
 mat* mse_grad(mat* target, mat* pred);
 
 // Activations //
-mat* mat_tanh(mat* x, mat* weights, mat* bias);
-mat* mat_tanh_grad(mat* x, mat* weights, mat* bias, mat* out_error, double lr);
+mat* mat_tanh(Layer* layer, mat* x);
+mat* mat_tanh_grad(Layer* layer, mat* out_error, double lr);
 
 double max(double a, double b);
 double relu(double x);
 double relu_grad(double x);
-mat* mat_relu(mat* x, mat* weights, mat* bias);
-mat* mat_relu_grad(mat* x, mat* weights, mat* bias, mat* out_error, double lr);
+mat* mat_relu(Layer* layer, mat* x);
+mat* mat_relu_grad(Layer* layer, mat* out_error, double lr);
 
 double sigmoid(double x);
 double sigmoid_grad(double x);
-mat* mat_sigmoid(mat* x, mat* weights, mat* bias);
-mat* mat_sigmoid_grad(mat* x, mat* weights, mat* bias, mat* out_error, double lr);
+mat* mat_sigmoid(Layer* layer, mat* x);
+mat* mat_sigmoid_grad(Layer* layer, mat* out_error, double lr);
