@@ -75,7 +75,9 @@ void net_backward(Network* net, mat* x, mat* output, mat* target, LossFunc loss,
 
 mat* layer_forward(Layer* layer, mat* x) {
     layer -> input = mcopy(x);
-    return layer -> forward(x, layer -> weights, layer -> biases);
+    mat* output = layer -> forward(x, layer -> weights, layer -> biases);
+    layer -> output = output; // only needed for softmax, find better solution, input layer to forward methods instead?
+    return output;
 }
 mat* layer_back(Layer* layer, mat* out_error, double lr) {
     return layer -> backward(layer -> input, layer -> weights, layer -> biases, out_error, lr);
@@ -173,7 +175,7 @@ mat* softmax_layer(mat* x, mat* weights, mat* bias) {
     return result;
 }
 mat* softmax_layer_back(mat* x, mat* weights, mat* bias, mat* out_error, double lr) {
-
+    // mat* tmp = mvstack()
 }
 
 // Error Functions //

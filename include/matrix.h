@@ -18,6 +18,8 @@ mat* mdot(mat*, mat*);
 double mmax(mat* matrix);
 double msum(mat* matrix);
 
+mat* mvstack(mat* matrix, unsigned int height);
+
 mat* mscale(double, mat*);
 mat* mscalediv(mat*, double divideby);
 mat* mscaleadd(double, mat*);

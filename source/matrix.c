@@ -3,6 +3,7 @@
 #include <assert.h>
 #include <math.h>
 #include "../include/matrix.h"
+#include "../include/nn.h"
 
 mat* new_matrix(unsigned int width, unsigned int height) {
 	mat *matrix = malloc(sizeof(mat));
@@ -112,6 +113,16 @@ double msum(mat* matrix) {
         sum += matrix -> data[i];
     }
     return sum;
+}
+
+mat* mvstack(mat* matrix, unsigned int height) {
+    assert(matrix -> width == 1 || matrix -> height == 1); // assumes 2d matrix dimensions
+    unsigned int size = max(matrix -> width, matrix -> height);
+    mat* result = new_matrix(size, height);
+    for(unsigned int i = 0; i < result -> size; i++) {
+        result -> data[i] = matrix -> data[i % size];
+    }
+    return result;
 }
 
 
