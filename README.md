@@ -10,7 +10,6 @@ A machine learning libary, made completely from scratch.
 - Activation & loss
     - Softmax
     - Sigmoid Activation
-    - ReLU Activation
     - Categorical Cross Entropy loss
 - Models
     - ConvNet

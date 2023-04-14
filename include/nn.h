@@ -17,7 +17,7 @@ typedef struct {
     int num_layers;
 } Network;
 
-void net_train(Network* net, DispErrorFunc errorFunc, LossFunc loss, mat** batch, mat** labels, int samples, int epochs, double lr, int interval);
+void net_train(Network* net, DispErrorFunc errorFunc, mat** batch, mat** labels, int samples, int epochs, double lr, int interval);
 Network* make_fc_network(unsigned int *sizes, int num_layers, LayerFunc activation, GradFunc activation_grad, LossFunc loss);
 mat* net_forward(Network* net, mat* x);
 void net_backward(Network* net, mat* x, mat* output, mat* target, LossFunc loss, double lr);
@@ -38,3 +38,9 @@ mat* mse_grad(mat* target, mat* pred);
 
 mat* mat_tanh(mat* x, mat* weights, mat* bias);
 mat* mat_tanh_grad(mat* x, mat* weights, mat* bias, mat* out_error, double lr);
+
+double max(double a, double b);
+double relu(double x);
+double relu_grad(double x);
+mat* mat_relu(mat* x, mat* weights, mat* bias);
+mat* mat_relu_grad(mat* x, mat* weights, mat* bias, mat* out_error, double lr);

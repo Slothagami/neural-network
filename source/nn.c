@@ -4,7 +4,8 @@
 #include "../include/matrix.h"
 #include "../include/nn.h"
 
-void net_train(Network* net, DispErrorFunc errorFunc, LossFunc loss, mat** batch, mat** labels, int samples, int epochs, double lr, int interval) {
+// Network //
+void net_train(Network* net, DispErrorFunc errorFunc, mat** batch, mat** labels, int samples, int epochs, double lr, int interval) {
     mat* result;
     double error_sum;
     for(int epoch = 0; epoch < epochs; epoch++) {
@@ -14,7 +15,7 @@ void net_train(Network* net, DispErrorFunc errorFunc, LossFunc loss, mat** batch
 
             // backward
             error_sum += errorFunc(labels[sample], result);
-            net_backward(net, batch[sample], result, labels[sample], loss, lr);
+            net_backward(net, batch[sample], result, labels[sample], net -> loss, lr);
         }
 
         if((epoch + 1) % interval == 0) printf("Epoch %d, Error: %f\n", epoch + 1, error_sum / samples);
@@ -80,6 +81,7 @@ mat* layer_back(Layer* layer, mat* out_error, double lr) {
     return layer -> backward(layer -> input, layer -> weights, layer -> biases, out_error, lr);
 }
 
+// Layer Types //
 Layer* make_layer(unsigned int in_size, unsigned int out_size, LayerFunc forward, GradFunc backward) {
     Layer* layer = malloc(sizeof(Layer));
 
@@ -156,7 +158,7 @@ mat* fc_layer_back(mat* x, mat* weights, mat* bias, mat* out_error, double lr) {
     return in_error;
 }
 
-// Error Functions
+// Error Functions //
 mat* mse_grad(mat* target, mat* pred) {
     // 2 * (prediction - target) / target.size
     mat* difference        = msub(pred, target);
@@ -184,6 +186,7 @@ double mse(mat* target, mat* pred) {
     return sum / size;
 }
 
+// Activations //
 mat* mat_tanh(mat* x, mat* weights, mat* bias) {
     return mmap(tanh, x);
 }
@@ -199,5 +202,25 @@ mat* mat_tanh_grad(mat* x, mat* weights, mat* bias, mat* out_error, double lr) {
     mfree(tanh_squared);
     mfree(negative);
     mfree(negative_plus_one);
+    return result;
+}
+
+double max(double a, double b) {
+    return (a > b)? a : b;
+}
+double relu(double x) {
+    return max(0, x);
+}
+double relu_grad(double x) {
+    return (x > 0)? 1: 0;
+}
+mat* mat_relu(mat* x, mat* weights, mat* bias) {
+    return mmap(relu, x);
+}
+mat* mat_relu_grad(mat* x, mat* weights, mat* bias, mat* out_error, double lr) {
+    mat* d_relu = mmap(relu_grad, x);
+    mat* result = mmult(d_relu, out_error);
+
+    mfree(d_relu);
     return result;
 }
