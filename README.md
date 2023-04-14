@@ -8,7 +8,7 @@ A machine learning libary, made completely from scratch.
     - python wrapper
     - c equivalent of python implimentation
 - Activation & loss
-    - Softmax
+    - Softmax layer
     - Categorical Cross Entropy loss
 - Models
     - ConvNet

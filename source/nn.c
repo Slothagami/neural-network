@@ -158,6 +158,20 @@ mat* fc_layer_back(mat* x, mat* weights, mat* bias, mat* out_error, double lr) {
     return in_error;
 }
 
+mat* softmax_layer(mat* x, mat* weights, mat* bias) {
+    double max = mmax(x);
+    mat* shift = mscalesub(x, max); // shift values down to avoid overflow
+    mat* exp_x = mmap(exp, shift);
+    mat* result = mscalediv(exp_x, msum(exp_x));
+
+    mfree(shift);
+    mfree(exp_x);
+    return result;
+}
+mat* softmax_layer_back(mat* x, mat* weights, mat* bias, mat* out_error, double lr) {
+
+}
+
 // Error Functions //
 mat* mse_grad(mat* target, mat* pred) {
     // 2 * (prediction - target) / target.size

@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
+#include <math.h>
 #include "../include/matrix.h"
 
 mat* new_matrix(unsigned int width, unsigned int height) {
@@ -97,6 +98,22 @@ mat* mdot(mat* a, mat* b) {
     
     return prod;
 }
+
+double mmax(mat* matrix) {
+    double max = -INFINITY;
+    for(unsigned int i = 0; i < matrix -> size; i++) {
+        if(matrix -> data[i] > max) max = matrix -> data[i];
+    }
+    return max;
+}
+double msum(mat* matrix) {
+    double sum = 0;
+    for(unsigned int i = 0; i < matrix -> size; i++) {
+        sum += matrix -> data[i];
+    }
+    return sum;
+}
+
 
 mat* mscale(double scale, mat* matrix) {
     mat *scaled = matrix_like(matrix);
