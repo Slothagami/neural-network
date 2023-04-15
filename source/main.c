@@ -55,8 +55,6 @@ int main() {
 	mfree(d);
 	mfree(one);
 	mfree(zero);
-
 	free_network(net);
-
 	return 0;
 }

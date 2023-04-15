@@ -23,6 +23,7 @@ typedef struct {
 // Network //
 void net_train(Network* net, DispErrorFunc errorFunc, mat** batch, mat** labels, int samples, int epochs, double lr, int interval);
 Network* make_fc_network(unsigned int *sizes, int num_layers, LayerFunc activation, GradFunc activation_grad, LossFunc loss);
+void net_add_layer(Network* net, Layer* layer);
 mat* net_forward(Network* net, mat* x);
 void net_backward(Network* net, mat* x, mat* output, mat* target, LossFunc loss, double lr);
 
@@ -34,6 +35,7 @@ mat* layer_back(Layer* layer, mat* out_error, double lr);
 
 void free_layer(Layer*);
 void free_network(Network*);
+void free_net_layers(Network* net);
 
 mat* fc_layer(Layer* layer, mat* x);
 mat* fc_layer_back(Layer* layer, mat* out_error, double lr);

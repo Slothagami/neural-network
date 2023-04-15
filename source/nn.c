@@ -42,14 +42,42 @@ Network* make_fc_network(unsigned int *sizes, int num_layers, LayerFunc activati
     }
     return net;
 }
+
+void net_add_layer(Network* net, Layer* layer) {
+    if(net == NULL) {
+        printf("Null pointer given for network");
+        exit(EXIT_FAILURE);
+    }
+    // reallocate layers array with new space for new layer
+    Layer** new_layers = malloc(sizeof(Layer*) * (net -> num_layers + 1));
+    if(new_layers == NULL) {
+        printf("Failed to allocate memory for new layer");
+    }
+
+    for(int i = 0; i < net -> num_layers; i++) { // allocate existing layes
+        new_layers[i] = net -> layers[i];
+    }
+
+    // add in new layer
+    new_layers[net -> num_layers] = layer;
+
+    // merge
+    free_net_layers(net);
+    net -> num_layers += 1;
+    net -> layers = new_layers;
+}
+
 void free_network(Network* net) {
     if(net == NULL) return;
+    free_net_layers(net);
+    free(net);
+}
+void free_net_layers(Network* net) {
     for(int i = 0; i < net -> num_layers; i++) {
         if(net -> layers[i] == NULL) continue;
         free_layer(net -> layers[i]);
     }
     free(net -> layers);
-    free(net);
 }
 
 mat* net_forward(Network* net, mat* input) {
