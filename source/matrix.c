@@ -7,11 +7,21 @@
 
 mat* new_matrix(unsigned int width, unsigned int height) {
 	mat *matrix = malloc(sizeof(mat));
+    if(matrix == NULL) {
+        printf("Failed to allocate new matrix");
+        exit(EXIT_FAILURE);
+    }
     
     matrix -> width  = width;
     matrix -> height = height;
     matrix -> size   = width * height;
     matrix -> data   = malloc(sizeof(double) * width * height);
+
+    if(matrix -> data == NULL) {
+        printf("Failed to allocated matrix numerical data");
+        free(matrix);
+        exit(EXIT_FAILURE);
+    }
     
     return matrix;
 }
