@@ -62,7 +62,7 @@ void net_add_layer(Network* net, Layer* layer) {
     new_layers[net -> num_layers] = layer;
 
     // merge
-    free_net_layers(net);
+    free(net -> layers); // don't free_net_layers, because we're reusing them
     net -> num_layers += 1;
     net -> layers = new_layers;
 }
