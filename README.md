@@ -11,9 +11,14 @@ A machine learning libary, made completely from scratch.
         - c equivalent of python implimentation
         - save/load of trained models (and their layers)
         - Categorical Cross Entropy loss
+
 - Future Milestones
-    - ConvNet
-    - UNets
     - Diffusion Model
+        - Diffusion
+        - UNet
+            - ConvNet
+            - Transposed Convolution
     - Transformer Language model
+        - Transformer
+        - Tokenization
         - Discord chatbot
