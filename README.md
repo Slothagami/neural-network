@@ -12,13 +12,14 @@ A machine learning libary, made completely from scratch.
         - save/load of trained models (and their layers)
         - Categorical Cross Entropy loss
 
-- Future Milestones
-    - Diffusion Model
-        - Diffusion
-        - UNet
-            - ConvNet
-            - Transposed Convolution
-    - Transformer Language model
-        - Transformer
-        - Tokenization
-        - Discord chatbot
+<br></br>
+### Future Milestones
+- Diffusion Model
+    - Diffusion
+    - UNet
+        - ConvNet
+        - Transposed Convolution
+- Transformer Language model
+    - Transformer
+    - Tokenization
+    - Discord chatbot
