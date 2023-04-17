@@ -39,7 +39,7 @@ int main() {
 	Network* net = make_fc_network(layers, num_layers, mat_tanh, mat_tanh_grad, mse_grad);
 
 	// add layer
-	Layer* layer = make_activation_layer(mat_tanh, mat_tanh_grad);
+	Layer* layer = make_activation_layer(softmax_layer, softmax_layer_back);
 	net_add_layer(net, layer);
 
 	net_train(net, mse, batch, labels, samples, 500, .1, 100);
