@@ -39,16 +39,6 @@ int main() {
 	Network* net = make_fc_network(layers, num_layers, mat_tanh, mat_tanh_grad, mse_grad);
 
 	net_train(net, mse, batch, labels, samples, 500, .1, 100);
-
-	// test network
-	for(int i = 0; i < samples; i++) {
-		mat* pred = net_forward(net, batch[i]);
-		printm(labels[i]);
-		printm(pred);
-		printf("\n");
-		mfree(pred);
-	}
-
 	test_acc(net, batch, labels, samples, mse);
 
 	mfree(a);
