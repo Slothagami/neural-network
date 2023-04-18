@@ -36,9 +36,9 @@ int main() {
 	// train network
 	unsigned int layers[] = {2, 3, 2};
 	int num_layers = sizeof(layers) / sizeof(unsigned int) - 1; // len(layers) - 1
-	Network* net = make_fc_network(layers, num_layers, mat_tanh, mat_tanh_grad, mse_grad);
+	Network* net = make_fc_network(layers, num_layers, mat_tanh, mat_tanh_grad, cce_grad);
 
-	net_train(net, mse, batch, labels, samples, 500, .1, 100);
+	net_train(net, cce, batch, labels, samples, 500, .1, 100);
 
 	// test network
 	for(int i = 0; i < samples; i++) {

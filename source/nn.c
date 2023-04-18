@@ -250,6 +250,29 @@ double mse(mat* target, mat* pred) {
     return sum / size;
 }
 
+mat* cce_grad(mat* target, mat* pred) {
+    mat* pred_eps     = mscaleadd(EPS, pred);
+    mat* minus_target = mscale(-1, target);
+    mat* result       = mdiv(minus_target, pred_eps);
+
+    mfree(pred_eps);
+    mfree(minus_target);
+    return result;
+}
+double cce(mat* target, mat* pred) {
+    // Categorical Corss Entropy loss
+    mat* pred_eps = mscaleadd(EPS, pred); // to avoid ln(0) error
+    mat* ln_pred  = mmap(log, pred_eps);
+    mat* prod     = mmult(target, ln_pred);
+
+    float result = -msum(prod);
+
+    mfree(pred_eps);
+    mfree(ln_pred);
+    mfree(prod);
+    return result;
+}
+
 // Activations //
 mat* mat_tanh(Layer* layer, mat* x) {
     return mmap(tanh, x);

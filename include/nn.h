@@ -1,3 +1,5 @@
+#define EPS .000000001
+
 typedef struct Layer Layer;
 
 typedef mat* (*LayerFunc)(Layer* layer, mat* x);
@@ -46,6 +48,9 @@ mat* softmax_layer_back(Layer* layer, mat* out_error, double lr);
 // Error Functions //
 double mse(mat* target, mat* pred);
 mat* mse_grad(mat* target, mat* pred);
+
+mat* cce_grad(mat* target, mat* pred);
+double cce(mat* target, mat* pred);
 
 // Activations //
 mat* mat_tanh(Layer* layer, mat* x);

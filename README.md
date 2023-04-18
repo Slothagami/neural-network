@@ -1,6 +1,7 @@
 # br`ai`n
 A machine learning libary, made completely from scratch.
 
+<br></br>
 ### Plan
 - Upcoming Milestones
     - Mnist capable
@@ -10,7 +11,6 @@ A machine learning libary, made completely from scratch.
         - convolutional layers
         - c equivalent of python implimentation
         - save/load of trained models (and their layers)
-        - Categorical Cross Entropy loss
 
 <br></br>
 ### Future Milestones
