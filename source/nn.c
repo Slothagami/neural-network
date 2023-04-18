@@ -217,38 +217,6 @@ mat* fc_layer_back(Layer* layer, mat* out_error, double lr) {
     return in_error;
 }
 
-mat* softmax_layer(Layer* layer, mat* x) {
-    double max = mmax(x);
-    mat* shift = mscalesub(x, max); // shift values down to avoid overflow
-    mat* exp_x = mmap(exp, shift);
-    mat* result = mscalediv(exp_x, msum(exp_x));
-
-    mfree(shift);
-    mfree(exp_x);
-    layer -> output = mcopy(result);
-    return result;
-}
-mat* softmax_layer_back(Layer* layer, mat* out_error, double lr) {
-    mat* tmp = mvtile(layer -> output, layer -> output -> size);
-    mat* out_error_T = mtranspose(out_error);
-    mat* tmp_T       = mtranspose(tmp);
-
-    mat* identity   = midentity(layer -> output -> size);
-    mat* difference = msub(identity, tmp_T);
-    mat* scaled     = mmult(tmp, difference);
-    mat* result     = mdot(scaled, out_error_T);
-    mat* result_T   = mtranspose(result);
-
-    mfree(tmp);
-    mfree(out_error_T);
-    mfree(tmp_T);
-    mfree(identity);
-    mfree(difference);
-    mfree(scaled);
-    mfree(result);
-    return result_T;
-}
-
 // Layer Constructors //
 Layer* FCLayer(unsigned int in_size, unsigned int out_size) {
     return make_layer(in_size, out_size, fc_layer, fc_layer_back);
@@ -372,4 +340,36 @@ mat* mat_sigmoid_grad(Layer* layer, mat* out_error, double lr) {
 
     mfree(d_sig);
     return result;
+}
+
+mat* softmax_layer(Layer* layer, mat* x) {
+    double max = mmax(x);
+    mat* shift = mscalesub(x, max); // shift values down to avoid overflow
+    mat* exp_x = mmap(exp, shift);
+    mat* result = mscalediv(exp_x, msum(exp_x));
+
+    mfree(shift);
+    mfree(exp_x);
+    layer -> output = mcopy(result);
+    return result;
+}
+mat* softmax_layer_back(Layer* layer, mat* out_error, double lr) {
+    mat* tmp = mvtile(layer -> output, layer -> output -> size);
+    mat* out_error_T = mtranspose(out_error);
+    mat* tmp_T       = mtranspose(tmp);
+
+    mat* identity   = midentity(layer -> output -> size);
+    mat* difference = msub(identity, tmp_T);
+    mat* scaled     = mmult(tmp, difference);
+    mat* result     = mdot(scaled, out_error_T);
+    mat* result_T   = mtranspose(result);
+
+    mfree(tmp);
+    mfree(out_error_T);
+    mfree(tmp_T);
+    mfree(identity);
+    mfree(difference);
+    mfree(scaled);
+    mfree(result);
+    return result_T;
 }
