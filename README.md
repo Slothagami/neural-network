@@ -4,17 +4,17 @@ A machine learning libary, made completely from scratch.
 <br></br>
 ### Upcoming Milestones
 - Mnist capable
-    - batch derivatives
     - python wrapper
+    - batch derivatives
 - Mnist proficient
     - convolutional layers
     - reshape layer
     - pooling layer
-    - c equivalent of python implimentation
     - save/load of trained models (and their layers)
 
 <br></br>
 ### Future Milestones
+- Cifar10
 - Diffusion Model
     - Diffusion
     - UNet
