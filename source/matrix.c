@@ -200,8 +200,8 @@ mat* mdiv(mat* a, mat* b) {
     assert(msame_shape(a, b));
     mat *prod = matrix_like(a);
     for(unsigned int i = 0; i < a -> size; i++) {
-        if(a -> data[i] == 0) printf("Warning: divide by zero in mdiv()");
-    	prod -> data[i] = b -> data[i] / a -> data[i];
+        if(b -> data[i] == 0) printf("Warning: divide by zero in mdiv()\n");
+    	prod -> data[i] = a -> data[i] / b -> data[i];
     }
     return prod;
 }
