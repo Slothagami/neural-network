@@ -36,6 +36,7 @@ Layer* make_activation_layer(LayerFunc forward, GradFunc backward);
 mat* layer_forward(Layer* layer, mat* x);
 mat* layer_back(Layer* layer, mat* out_error, double lr);
 
+
 void free_layer(Layer*);
 void free_network(Network*);
 void free_net_layers(Network* net);
@@ -45,6 +46,13 @@ mat* fc_layer_back(Layer* layer, mat* out_error, double lr);
 
 mat* softmax_layer(Layer* layer, mat* x);
 mat* softmax_layer_back(Layer* layer, mat* out_error, double lr);
+
+// Layer Constructors //
+Layer* FCLayer(unsigned int in_size, unsigned int out_size);
+Layer* TanhLayer();
+Layer* SoftmaxLayer();
+Layer* ReluLayer();
+Layer* SigmoidLayer();
 
 // Error Functions //
 double mse(mat* target, mat* pred);

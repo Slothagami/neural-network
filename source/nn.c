@@ -37,7 +37,7 @@ Network* make_fc_network(unsigned int *sizes, int num_layers, LayerFunc activati
 
     // alternating FC and activation layers
     for(int i = 1; i < net -> num_layers - 1; i += 1) {
-        net -> layers[2*i - 2] = make_layer(sizes[i-1], sizes[i], fc_layer, fc_layer_back);
+        net -> layers[2*i - 2] = FCLayer(sizes[i-1], sizes[i]);
         net -> layers[2*i - 1] = make_activation_layer(activation, activation_grad);
     }
     return net;
@@ -236,6 +236,23 @@ mat* softmax_layer_back(Layer* layer, mat* out_error, double lr) {
     mfree(scaled);
     mfree(result);
     return result_T;
+}
+
+// Layer Constructors //
+Layer* FCLayer(unsigned int in_size, unsigned int out_size) {
+    return make_layer(in_size, out_size, fc_layer, fc_layer_back);
+}
+Layer* TanhLayer() {
+    return make_activation_layer(mat_tanh, mat_tanh_grad);
+}
+Layer* SoftmaxLayer() {
+    return make_activation_layer(softmax_layer, softmax_layer_back);
+}
+Layer* ReluLayer() {
+    return make_activation_layer(mat_relu, mat_relu_grad);
+}
+Layer* SigmoidLayer() {
+    return make_activation_layer(mat_sigmoid, mat_sigmoid_grad);
 }
 
 // Error Functions //
