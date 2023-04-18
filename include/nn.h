@@ -10,6 +10,11 @@ typedef double (*DispErrorFunc)(mat* target, mat* pred);
 struct Layer {
     LayerFunc forward;
     GradFunc backward;
+
+    mat* delta_weights;
+    mat* delta_biases;
+    int delta_n;
+
     mat* weights;
     mat* biases;
     mat* input;

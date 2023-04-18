@@ -132,8 +132,14 @@ Layer* make_layer(unsigned int in_size, unsigned int out_size, LayerFunc forward
     layer -> forward  = forward;
     layer -> backward = backward;
 
+    layer -> delta_n = 0;
     layer -> weights = rand_matrix(out_size, in_size);
     layer -> biases  = rand_matrix(1, out_size);
+
+    layer -> delta_weights = matrix_like(layer -> weights);
+    layer -> delta_biases  = matrix_like(layer -> biases);
+    mfill(layer -> delta_weights, 0);
+    mfill(layer -> delta_biases,  0);
 
     layer -> input  = NULL;
     layer -> output = NULL;
@@ -146,6 +152,9 @@ Layer* make_activation_layer(LayerFunc forward, GradFunc backward) {
     layer -> forward  = forward;
     layer -> backward = backward;
 
+    layer -> delta_n = 0;
+    layer -> delta_weights = NULL;
+    layer -> delta_biases  = NULL;
     layer -> weights = NULL;
     layer -> biases  = NULL;
     layer -> input   = NULL;
@@ -156,6 +165,8 @@ Layer* make_activation_layer(LayerFunc forward, GradFunc backward) {
 void free_layer(Layer* layer) {
     if(layer -> weights != NULL) mfree(layer -> weights);
     if(layer -> biases  != NULL) mfree(layer -> biases );
+    if(layer -> delta_weights != NULL) mfree(layer -> delta_weights);
+    if(layer -> delta_biases  != NULL) mfree(layer -> delta_biases );
     if(layer -> input   != NULL) mfree(layer -> input  );
     free(layer);
 }

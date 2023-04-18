@@ -5,7 +5,7 @@
 #include <time.h>
 
 int main() {
-	// make network (mnist) - lr=.01, ((28*28, 100, 50, 10), Tanh)
+	// make network (mnist) - lr=.01, ((28*28, 100, 50, 10), Tanh) # Gets ~80% acc w/ 5 epochs
 	srand(time(NULL)); // set the random seed to the time
 
 	// input data (xor inputs)
