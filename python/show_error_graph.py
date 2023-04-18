@@ -10,4 +10,5 @@ plt.xlabel("Epoch")
 plt.ylabel("Error")
 
 plt.plot(numbers)
+# plt.ylim((0, ylim))
 plt.show()

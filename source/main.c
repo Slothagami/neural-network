@@ -49,6 +49,8 @@ int main() {
 		mfree(pred);
 	}
 
+	test_acc(net, batch, labels, samples, mse);
+
 	mfree(a);
 	mfree(b);
 	mfree(c);

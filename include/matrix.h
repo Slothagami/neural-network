@@ -16,6 +16,7 @@ void mfree(mat*);
 mat* mdot(mat*, mat*);
 
 double mmax(mat* matrix);
+double margmax(mat* matrix);
 double msum(mat* matrix);
 
 mat* mvtile(mat* matrix, unsigned int height);

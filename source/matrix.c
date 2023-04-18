@@ -117,6 +117,17 @@ double mmax(mat* matrix) {
     }
     return max;
 }
+double margmax(mat* matrix) {
+    double max = -INFINITY;
+    unsigned int max_ind = 0;
+    for(unsigned int i = 0; i < matrix -> size; i++) {
+        if(matrix -> data[i] > max) {
+            max = matrix -> data[i];
+            max_ind = i;
+        }
+    }
+    return max_ind;
+}
 double msum(mat* matrix) {
     double sum = 0;
     for(unsigned int i = 0; i < matrix -> size; i++) {

@@ -109,6 +109,22 @@ mat* layer_back(Layer* layer, mat* out_error, double lr) {
     return layer -> backward(layer, out_error, lr);
 }
 
+void test_acc(Network* net, mat** inputs, mat** labels, int nsamples, DispErrorFunc loss) {
+    int correct = 0;
+    float total_loss = 0;
+    for(int i = 0; i < nsamples; i++) {
+        mat* pred = net_forward(net, inputs[i]);
+        total_loss += loss(labels[i], pred);
+        if(margmax(pred) == margmax(labels[i])) correct++;
+        mfree(pred);
+    }
+
+    float acc = 100 * correct / nsamples;
+    float avg_loss = total_loss / nsamples;
+    printf("\nAccuracy: %.1f%% (%d/%d)\n", acc, correct, nsamples);
+    printf("Test Loss: %.10f\n", avg_loss);
+}
+
 // Layer Types //
 Layer* make_layer(unsigned int in_size, unsigned int out_size, LayerFunc forward, GradFunc backward) {
     Layer* layer = malloc(sizeof(Layer));
