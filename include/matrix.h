@@ -5,8 +5,12 @@ typedef struct {
     unsigned int size;
 } mat;
 
+// utility
+double rand_norm(double mean, double stdev);
+
 // Constructor like
 mat* new_matrix(unsigned int, unsigned int);
+mat* rand_norm_matrix(unsigned int width, unsigned int height, double mean, double stdev);
 mat* rand_matrix(unsigned int, unsigned int);
 mat* matrix_like(mat*);
 mat* mcopy(mat*);

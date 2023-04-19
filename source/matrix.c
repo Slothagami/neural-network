@@ -5,6 +5,8 @@
 #include "../include/matrix.h"
 #include "../include/nn.h"
 
+#define PI 3.14159265358979323846
+
 mat* new_matrix(unsigned int width, unsigned int height) {
 	mat *matrix = malloc(sizeof(mat));
     if(matrix == NULL) {
@@ -34,9 +36,24 @@ mat* mcopy(mat* matrix) {
     return new;
 }
 
+// Random functions
+double rand_norm(double mean, double stdev) {
+    double u1 = (double) rand() / RAND_MAX;
+    double u2 = (double) rand() / RAND_MAX;
+    double z  = sqrt(-2 * log(u1)) * cos(2 * PI * u2);
+    return mean + stdev * z;
+}
+mat* rand_norm_matrix(unsigned int width, unsigned int height, double mean, double stdev) {
+    mat *matrix = new_matrix(width, height);
+    for(unsigned int i = 0; i < width * height; i++) {
+        matrix -> data[i] = rand_norm(mean, stdev);
+    }
+    return matrix;
+}
 mat* rand_matrix(unsigned int width, unsigned int height) {
     mat *matrix = new_matrix(width, height);
     for(unsigned int i = 0; i < width * height; i++) {
+        // random from -1 to 1
         matrix -> data[i] = (float) rand() / RAND_MAX * 2 - 1;
     }
     return matrix;
