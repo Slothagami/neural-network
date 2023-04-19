@@ -5,12 +5,12 @@ A machine learning libary, made completely from scratch.
 ### Upcoming Milestones
 - Mnist capable
     - python wrapper
-    - batch derivatives
 - Mnist proficient
     - convolutional layers
     - reshape layer
     - pooling layer
     - save/load of trained models (and their layers)
+        - don't allocate memory for delta_weights and delta_biases in models loaded for prediction only (2x memory use for no reason, as they are only used in training)
 
 <br></br>
 ### Future Milestones

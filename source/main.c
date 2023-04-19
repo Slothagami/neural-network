@@ -38,7 +38,7 @@ int main() {
 	int num_layers = sizeof(layers) / sizeof(unsigned int) - 1; // len(layers) - 1
 	Network* net = make_fc_network(layers, num_layers, mat_tanh, mat_tanh_grad, mse_grad);
 
-	net_train(net, mse, batch, labels, samples, 500, .1, 100);
+	net_train(net, mse, batch, labels, samples, 500, .1, 100, 4);
 	test_acc(net, batch, labels, samples, mse);
 
 	mfree(a);

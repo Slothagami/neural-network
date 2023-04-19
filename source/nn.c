@@ -5,7 +5,7 @@
 #include "../include/nn.h"
 
 // Network //
-void net_train(Network* net, DispErrorFunc errorFunc, mat** batch, mat** labels, int samples, int epochs, double lr, int interval) {
+void net_train(Network* net, DispErrorFunc errorFunc, mat** batch, mat** labels, int samples, int epochs, double lr, int interval, int batch_size) {
     mat* result;
     double error_sum;
     for(int epoch = 0; epoch < epochs; epoch++) {
@@ -16,11 +16,13 @@ void net_train(Network* net, DispErrorFunc errorFunc, mat** batch, mat** labels,
             // backward
             error_sum += errorFunc(labels[sample], result);
             net_backward(net, batch[sample], result, labels[sample], net -> loss, lr);
-            net_update(net);
+
+            if(sample % batch_size == 0) net_update(net); // update after every batch_size samples
         }
 
         if((epoch + 1) % interval == 0) printf("Epoch %d, Error: %f\n", epoch + 1, error_sum / samples);
     }
+    net_update(net); // update for the last batch
 	mfree(result);
 }
 void net_update(Network* net) {
