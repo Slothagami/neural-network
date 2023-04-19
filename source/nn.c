@@ -16,11 +16,17 @@ void net_train(Network* net, DispErrorFunc errorFunc, mat** batch, mat** labels,
             // backward
             error_sum += errorFunc(labels[sample], result);
             net_backward(net, batch[sample], result, labels[sample], net -> loss, lr);
+            net_update(net);
         }
 
         if((epoch + 1) % interval == 0) printf("Epoch %d, Error: %f\n", epoch + 1, error_sum / samples);
     }
 	mfree(result);
+}
+void net_update(Network* net) {
+    for(int i = 0; i < net -> num_layers; i++) {
+        layer_update(net -> layers[i]);
+    }
 }
 
 Network* make_fc_network(unsigned int *sizes, int num_layers, LayerFunc activation, GradFunc activation_grad, LossFunc loss) {
@@ -99,6 +105,38 @@ void net_backward(Network* net, mat* x, mat* output, mat* target, LossFunc loss,
         error = new_error;
     }
     mfree(error);
+}
+void layer_update(Layer* layer) {
+    if(layer -> delta_weights == NULL) return;
+    if(layer -> delta_biases  == NULL) return;
+
+    // add everage of delta_weights to weights
+    mat* avg_w = mscalediv(layer -> delta_weights, layer -> delta_n);
+    mat* avg_b = mscalediv(layer -> delta_biases,  layer -> delta_n);
+
+    // subtract the gradient
+    mat* new_w = msub(avg_w, layer -> weights);
+    mat* new_b = msub(avg_b, layer -> biases);
+
+    // swap the data of new weights and layer weights
+    double* new_w_dat = new_w -> data;
+    double* new_b_dat = new_b -> data;
+
+    new_w -> data = layer -> weights -> data;
+    new_b -> data = layer -> biases  -> data;
+
+    layer -> weights -> data = new_w_dat;
+    layer -> biases  -> data = new_b_dat;
+
+    mfree(new_w);
+    mfree(new_b);
+    mfree(avg_w);
+    mfree(avg_b);
+
+    // reset the data for next batch
+    layer -> delta_n = 0;
+    mfill(layer -> delta_weights, 0);
+    mfill(layer -> delta_biases,  0);
 }
 
 mat* layer_forward(Layer* layer, mat* x) {
@@ -190,21 +228,23 @@ mat* fc_layer_back(Layer* layer, mat* out_error, double lr) {
     mat* scaled_e = mscale(lr,     out_error);
 
     mat* scaled_e_T = mtranspose(scaled_e);
-    mat* new_w    = msub(layer -> weights,  scaled_w);
-    mat* new_b    = msub(layer -> biases, scaled_e_T);
+    mat* new_w    = madd(layer -> delta_weights,  scaled_w);
+    mat* new_b    = madd(layer -> delta_biases, scaled_e_T);
 
     mfree(scaled_e_T);
 
     // freeing the weights data on its own results in the new data being freed when calling mfree(new_w/b) so 
     // swapping them so the right ones get freed
-    double* weights_dat = layer -> weights -> data;
-    double* bias_dat    = layer -> biases  -> data;
+    double* weights_dat = layer -> delta_weights -> data;
+    double* bias_dat    = layer -> delta_biases  -> data;
 
-    layer -> weights -> data = new_w -> data;
-    layer -> biases  -> data = new_b -> data;
+    layer -> delta_weights -> data = new_w -> data;
+    layer -> delta_biases  -> data = new_b -> data;
 
     new_w -> data = weights_dat;
     new_b -> data = bias_dat;
+
+    layer -> delta_n++;
 
     mfree(weights_error);
     mfree(new_w); // also frees weights -> data since its the same pointer

@@ -33,14 +33,16 @@ Network* make_fc_network(unsigned int *sizes, int num_layers, LayerFunc activati
 void net_add_layer(Network* net, Layer* layer);
 mat* net_forward(Network* net, mat* x);
 void net_backward(Network* net, mat* x, mat* output, mat* target, LossFunc loss, double lr);
+void net_update(Network* net);
 void test_acc(Network* net, mat** inputs, mat** labels, int nsamples, DispErrorFunc loss);
 
 // Layer //
 Layer* make_layer(unsigned int in_size, unsigned int out_size, LayerFunc forward, GradFunc backward);
 Layer* make_activation_layer(LayerFunc forward, GradFunc backward);
+
 mat* layer_forward(Layer* layer, mat* x);
 mat* layer_back(Layer* layer, mat* out_error, double lr);
-
+void layer_update(Layer* layer);
 
 void free_layer(Layer*);
 void free_network(Network*);
