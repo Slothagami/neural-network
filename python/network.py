@@ -27,9 +27,3 @@ def mat_to_numpy(mat_ptr):
     data_ptr = ctypes.cast(mat.data, ctypes.POINTER(ctypes.c_double * mat.size))
     data = np.ctypeslib.as_array(data_ptr.contents)
     return np.reshape(data, (mat.height, mat.width))
-
-if __name__ == "__main__":
-    a = np.zeros((3, 3))
-    mat = mat_from_numpy(a)
-    arr = mat_to_numpy(mat)
-    print(arr)
