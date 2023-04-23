@@ -1,4 +1,5 @@
 import ctypes
+from ctypes import c_int, c_uint, c_double
 import numpy as np
 
 lib = ctypes.CDLL("./build/network.so")
@@ -32,14 +33,14 @@ class Layer(ctypes.Structure):
 layer = ctypes.POINTER(Layer)
 mat   = ctypes.POINTER(Matrix)
 LayerFunc = ctypes.CFUNCTYPE(mat, layer, mat)
-GradFunc  = ctypes.CFUNCTYPE(mat, layer, mat, ctypes.c_double)
+GradFunc  = ctypes.CFUNCTYPE(mat, layer, mat, c_double)
 
 Layer._fields_ = [
     ("forward",  LayerFunc),
     ("backward", GradFunc),
     ("delta_weights", mat),
     ("delta_biases",  mat),
-    ("delta_n",       ctypes.c_int),
+    ("delta_n",       c_int),
     ("weights",       mat),
     ("biases",        mat),
     ("input",         mat),
@@ -48,11 +49,11 @@ Layer._fields_ = [
 
 # C Function Definitions
 new_matrix = lib.new_matrix
-new_matrix.argtypes = [ctypes.c_uint, ctypes.c_uint]
+new_matrix.argtypes = [c_uint, c_uint]
 new_matrix.restype  =  mat
 
 FCLayer = lib.FCLayer
-FCLayer.argtypes = [ctypes.c_uint, ctypes.c_uint]
+FCLayer.argtypes = [c_uint, c_uint]
 FCLayer.restype = layer
 
 # Define Layer Types
