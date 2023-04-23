@@ -33,11 +33,14 @@ int main() {
 	one  -> data[0] = 1;
 	mat* labels[] = {zero, one, one, zero};
 
-	// train network
-	unsigned int layers[] = {2, 3, 2};
-	int num_layers = sizeof(layers) / sizeof(unsigned int) - 1; // len(layers) - 1
-	Network* net = make_fc_network(layers, num_layers, mat_tanh, mat_tanh_grad, mse_grad);
+	// make network
+	Network* net = make_network(mse_grad);
+	net_add_layer(net, FCLayer(2, 3));
+	net_add_layer(net, TanhLayer());
+	net_add_layer(net, FCLayer(3, 2));
+	net_add_layer(net, TanhLayer());
 
+	// train
 	net_train(net, mse, batch, labels, samples, 500, .1, 100, 4);
 	test_acc(net, batch, labels, samples, mse);
 

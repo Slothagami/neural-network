@@ -31,6 +31,16 @@ void net_update(Network* net) {
     }
 }
 
+Network* make_network(LossFunc loss) {
+    Network* net = malloc(sizeof(Network));
+    if(net == NULL) return NULL;
+
+    net -> loss = loss;
+    net -> num_layers = 0;
+    net -> layers = NULL; // times two because of activation layers
+    return net;
+}
+
 Network* make_fc_network(unsigned int *sizes, int num_layers, LayerFunc activation, GradFunc activation_grad, LossFunc loss) {
     Network* net = malloc(sizeof(Network));
     if(net == NULL) return NULL;
@@ -62,8 +72,10 @@ void net_add_layer(Network* net, Layer* layer) {
         printf("Failed to allocate memory for new layer");
     }
 
-    for(int i = 0; i < net -> num_layers; i++) { // allocate existing layes
-        new_layers[i] = net -> layers[i];
+    if(net -> num_layers > 0) { // don't copy elements if the list is null
+        for(int i = 0; i < net -> num_layers; i++) { // allocate existing layes
+            new_layers[i] = net -> layers[i];
+        }
     }
 
     // add in new layer
