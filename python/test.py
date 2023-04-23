@@ -1,7 +1,9 @@
-from network import Matrix
+from network import *
 import numpy as np
 
-arr = np.arange(9).reshape((3, 3))
-mat = Matrix.from_numpy(arr)
-arr = Matrix.to_numpy(mat)
-print(arr)
+nn = Net(mse_grad, mse)
+
+nn.add(FCLayer(2, 3))
+nn.add(TanhLayer())
+nn.add(FCLayer(3, 2))
+nn.add(TanhLayer())

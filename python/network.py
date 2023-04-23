@@ -30,10 +30,16 @@ class Matrix(ctypes.Structure):
 class Layer(ctypes.Structure):
     pass
 
+class Network(ctypes.Structure):
+    pass
+
 layer = ctypes.POINTER(Layer)
 mat   = ctypes.POINTER(Matrix)
-LayerFunc = ctypes.CFUNCTYPE(mat, layer, mat)
-GradFunc  = ctypes.CFUNCTYPE(mat, layer, mat, c_double)
+net   = ctypes.POINTER(Network)
+LayerFunc     = ctypes.CFUNCTYPE(mat, layer, mat)
+GradFunc      = ctypes.CFUNCTYPE(mat, layer, mat, c_double)
+LossFunc      = ctypes.CFUNCTYPE(mat, mat, mat)
+DispErrorFunc = ctypes.CFUNCTYPE(c_double, mat, mat)
 
 Layer._fields_ = [
     ("forward",  LayerFunc),
@@ -46,11 +52,40 @@ Layer._fields_ = [
     ("input",         mat),
     ("output",        mat)
 ]
+Network._fields_ = [
+    ("layers", ctypes.POINTER(layer)),
+    ("loss", LossFunc),
+    ("num_layers", c_int),
+]
+
+make_network = lib.make_network
+make_network.argtypes = [LossFunc]
+make_network.restype  = net
+
+net_add_layer = lib.net_add_layer
+net_add_layer.argtypes = [net, layer]
+net_add_layer.restype  = None
+
+net_train = lib.net_train
+net_train.argtypes = [net, DispErrorFunc, ctypes.POINTER(mat), ctypes.POINTER(mat), c_int, c_int, c_double, c_int, c_int]
+net_train.restype = None
+
+class Net:
+    def __init__(self, loss, loss_disp):
+        self.network = make_network(loss)
+        self.loss_disp = loss_disp
+
+    def add(self, layer):
+        net_add_layer(self.network, layer)
+
+    def train(self, batch, labels, samples, epochs, lr, batch_size, print_interval=100):
+        # need to convert arrays into mat** type?
+        net_train(self.network, self.loss_disp, batch, labels, samples, epochs, lr, print_interval, batch_size)
 
 # C Function Definitions
 new_matrix = lib.new_matrix
 new_matrix.argtypes = [c_uint, c_uint]
-new_matrix.restype  =  mat
+new_matrix.restype  = mat
 
 FCLayer = lib.FCLayer
 FCLayer.argtypes = [c_uint, c_uint]
@@ -72,3 +107,20 @@ ReluLayer.restype = layer
 SigmoidLayer = lib.SigmoidLayer
 SigmoidLayer.argtypes = []
 SigmoidLayer.restype = layer
+
+# Define Error Functions
+mse = lib.mse
+mse.argtypes = [mat, mat]
+mse.restype = c_double
+
+mse_grad = lib.mse_grad
+mse_grad.argtypes = [mat, mat]
+mse_grad.restype = mat
+
+cce = lib.cce
+cce.argtypes = [mat, mat]
+cce.restype = c_double
+
+cce_grad = lib.cce_grad
+cce_grad.argtypes = [mat, mat]
+cce_grad.restype = mat
