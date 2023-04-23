@@ -26,7 +26,48 @@ class Matrix(ctypes.Structure):
         data = np.ctypeslib.as_array(data_ptr.contents)
         return np.reshape(data, (mat.height, mat.width))
 
+class Layer(ctypes.Structure):
+    pass
+
+layer = ctypes.POINTER(Layer)
+mat   = ctypes.POINTER(Matrix)
+LayerFunc = ctypes.CFUNCTYPE(mat, layer, mat)
+GradFunc  = ctypes.CFUNCTYPE(mat, layer, mat, ctypes.c_double)
+
+Layer._fields_ = [
+    ("forward",  LayerFunc),
+    ("backward", GradFunc),
+    ("delta_weights", mat),
+    ("delta_biases",  mat),
+    ("delta_n",       ctypes.c_int),
+    ("weights",       mat),
+    ("biases",        mat),
+    ("input",         mat),
+    ("output",        mat)
+]
+
 # C Function Definitions
 new_matrix = lib.new_matrix
 new_matrix.argtypes = [ctypes.c_uint, ctypes.c_uint]
-new_matrix.restype  =  ctypes.POINTER(Matrix)
+new_matrix.restype  =  mat
+
+FCLayer = lib.FCLayer
+FCLayer.argtypes = [ctypes.c_uint, ctypes.c_uint]
+FCLayer.restype = layer
+
+# Define Layer Types
+TanhLayer = lib.TanhLayer
+TanhLayer.argtypes = []
+TanhLayer.restype = layer
+
+SoftmaxLayer = lib.SoftmaxLayer
+SoftmaxLayer.argtypes = []
+SoftmaxLayer.restype = layer
+
+ReluLayer = lib.ReluLayer
+ReluLayer.argtypes = []
+ReluLayer.restype = layer
+
+SigmoidLayer = lib.SigmoidLayer
+SigmoidLayer.argtypes = []
+SigmoidLayer.restype = layer
