@@ -12,3 +12,8 @@ nn.add(FCLayer(2, 3))
 nn.add(TanhLayer())
 nn.add(FCLayer(3, 2))
 nn.add(TanhLayer())
+
+batch  = np.array([[[0], [0]], [[0], [1]], [[1], [0]], [[1], [1]]])
+labels = np.array([[[0], [1]], [[1], [0]], [[1], [0]], [[0], [1]]])
+
+nn.train(batch, labels, 500, .1, 4, 100)

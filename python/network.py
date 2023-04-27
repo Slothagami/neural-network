@@ -78,9 +78,23 @@ class Net:
     def add(self, layer):
         net_add_layer(self.network, layer)
 
-    def train(self, batch, labels, samples, epochs, lr, batch_size, print_interval=100):
-        # need to convert arrays into mat** type?
+    def train(self, batch, labels, epochs, lr, batch_size, print_interval=100):
+        samples = len(batch)
+        batch  = Net.batch_to_pointer(batch)
+        labels = Net.batch_to_pointer(labels)
         net_train(self.network, self.loss_disp, batch, labels, samples, epochs, lr, print_interval, batch_size)
+
+    @staticmethod
+    def batch_to_pointer(batch):
+        # Create an array of mat pointers for each sample
+        samples = []
+        for sample in batch:
+            print(sample.shape)
+            samples.append(Matrix.from_numpy(sample))
+
+        ptr_arr = (mat * len(samples))()
+        for i, samp in enumerate(samples): ptr_arr[i] = samp
+        return ptr_arr
 
 # C Function Definitions
 new_matrix = lib.new_matrix
