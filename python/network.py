@@ -1,5 +1,5 @@
 import ctypes
-from ctypes import c_int, c_uint, c_double
+from ctypes import c_int, c_uint, c_double, c_void_p
 import numpy as np
 
 lib = ctypes.CDLL("./build/network.so")
@@ -42,8 +42,8 @@ LossFunc      = ctypes.CFUNCTYPE(mat, mat, mat)
 DispErrorFunc = ctypes.CFUNCTYPE(c_double, mat, mat)
 
 Layer._fields_ = [
-    ("forward",  LayerFunc),
-    ("backward", GradFunc),
+    ("forward",  c_void_p),
+    ("backward", c_void_p),
     ("delta_weights", mat),
     ("delta_biases",  mat),
     ("delta_n",       c_int),
@@ -54,12 +54,12 @@ Layer._fields_ = [
 ]
 Network._fields_ = [
     ("layers", ctypes.POINTER(layer)),
-    ("loss", LossFunc),
+    ("loss", c_void_p),
     ("num_layers", c_int),
 ]
 
 make_network = lib.make_network
-make_network.argtypes = [LossFunc]
+make_network.argtypes = [c_void_p]
 make_network.restype  = net
 
 net_add_layer = lib.net_add_layer
@@ -67,7 +67,7 @@ net_add_layer.argtypes = [net, layer]
 net_add_layer.restype  = None
 
 net_train = lib.net_train
-net_train.argtypes = [net, DispErrorFunc, ctypes.POINTER(mat), ctypes.POINTER(mat), c_int, c_int, c_double, c_int, c_int]
+net_train.argtypes = [net, c_void_p, ctypes.POINTER(mat), ctypes.POINTER(mat), c_int, c_int, c_double, c_int, c_int]
 net_train.restype = None
 
 class Net:
@@ -109,18 +109,8 @@ SigmoidLayer.argtypes = []
 SigmoidLayer.restype = layer
 
 # Define Error Functions
-mse = lib.mse
-mse.argtypes = [mat, mat]
-mse.restype = c_double
+mse = DispErrorFunc.in_dll(lib, "mse")
+mse_grad = GradFunc.in_dll(lib, "mse_grad")
 
-mse_grad = lib.mse_grad
-mse_grad.argtypes = [mat, mat]
-mse_grad.restype = mat
-
-cce = lib.cce
-cce.argtypes = [mat, mat]
-cce.restype = c_double
-
-cce_grad = lib.cce_grad
-cce_grad.argtypes = [mat, mat]
-cce_grad.restype = mat
+cce = DispErrorFunc.in_dll(lib, "cce")
+cce_grad = GradFunc.in_dll(lib, "cce_grad")
