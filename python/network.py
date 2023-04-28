@@ -14,7 +14,7 @@ class Matrix(ctypes.Structure):
 
     @staticmethod
     def from_numpy(np_array):
-        width, height = np_array.shape 
+        height, width = np_array.shape
         mat = new_matrix(width, height)
         data = np_array.astype(np.float64).flatten()
         mat.contents.data = data.ctypes.data_as(ctypes.POINTER(ctypes.c_double))
@@ -25,7 +25,7 @@ class Matrix(ctypes.Structure):
         mat = mat_ptr.contents
         data_ptr = ctypes.cast(mat.data, ctypes.POINTER(ctypes.c_double * mat.size))
         data = np.ctypeslib.as_array(data_ptr.contents)
-        return np.reshape(data, (mat.height, mat.width))
+        return np.reshape(data, (mat.width, mat.height))
 
 class Layer(ctypes.Structure):
     pass
@@ -70,6 +70,10 @@ net_train = lib.net_train
 net_train.argtypes = [net, c_void_p, ctypes.POINTER(mat), ctypes.POINTER(mat), c_int, c_int, c_double, c_int, c_int]
 net_train.restype = None
 
+test_acc = lib.test_acc
+test_acc.argtypes = [net, ctypes.POINTER(mat), ctypes.POINTER(mat), c_int, c_void_p]
+test_acc.restype = None
+
 class Net:
     def __init__(self, loss, loss_disp):
         self.network = make_network(loss)
@@ -83,13 +87,13 @@ class Net:
         batch  = Net.batch_to_pointer(batch)
         labels = Net.batch_to_pointer(labels)
         net_train(self.network, self.loss_disp, batch, labels, samples, epochs, lr, print_interval, batch_size)
+        test_acc(self.network, batch, labels, samples, self.loss_disp)
 
     @staticmethod
     def batch_to_pointer(batch):
         # Create an array of mat pointers for each sample
         samples = []
         for sample in batch:
-            print(sample.shape)
             samples.append(Matrix.from_numpy(sample))
 
         ptr_arr = (mat * len(samples))()
