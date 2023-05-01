@@ -37,7 +37,7 @@ Network* make_network(LossFunc loss) {
 
     net -> loss = loss;
     net -> num_layers = 0;
-    net -> layers = NULL; // times two because of activation layers
+    net -> layers = NULL;
     return net;
 }
 

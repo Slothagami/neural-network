@@ -128,7 +128,7 @@ SigmoidLayer.restype = layer
 
 # Define Error Functions
 mse = DispErrorFunc.in_dll(lib, "mse")
-mse_grad = GradFunc.in_dll(lib, "mse_grad")
+mse_grad = LossFunc.in_dll(lib, "mse_grad")
 
 cce = DispErrorFunc.in_dll(lib, "cce")
-cce_grad = GradFunc.in_dll(lib, "cce_grad")
+cce_grad = LossFunc.in_dll(lib, "cce_grad")
