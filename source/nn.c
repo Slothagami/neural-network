@@ -35,9 +35,9 @@ Network* make_network(LossFunc loss) {
     Network* net = malloc(sizeof(Network));
     if(net == NULL) return NULL;
 
-    net -> loss = loss;
+    net -> loss       = loss;
     net -> num_layers = 0;
-    net -> layers = NULL;
+    net -> layers     = NULL;
     return net;
 }
 

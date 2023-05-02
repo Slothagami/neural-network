@@ -62,6 +62,10 @@ make_network = lib.make_network
 make_network.argtypes = [c_void_p]
 make_network.restype  = net
 
+free_network = lib.free_network
+free_network.argtypes = [net]
+free_network.restype  = None
+
 net_add_layer = lib.net_add_layer
 net_add_layer.argtypes = [net, layer]
 net_add_layer.restype  = None
@@ -99,6 +103,9 @@ class Net:
         ptr_arr = (mat * len(samples))()
         for i, samp in enumerate(samples): ptr_arr[i] = samp
         return ptr_arr
+    
+    def __del__(self):
+        free_network(self.network)
 
 # C Function Definitions
 new_matrix = lib.new_matrix
