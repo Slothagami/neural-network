@@ -3,8 +3,6 @@ A machine learning libary, made completely from scratch.
 
 <br></br>
 ### Upcoming Milestones
-- Mnist capable
-    - python wrapper
 - Mnist proficient
     - convolutional layers
     - reshape layer
