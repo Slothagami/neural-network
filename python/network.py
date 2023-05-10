@@ -14,7 +14,13 @@ class Matrix(ctypes.Structure):
 
     @staticmethod
     def from_numpy(np_array):
-        height, width = np_array.shape
+        if len(np_array.shape) == 2:
+            height, width = np_array.shape
+        elif len(np_array.shape) == 1:
+            height, width = 1, np_array.shape[0]
+        else:
+            raise ValueError(f"Numpy array of shape {np_array.shape} not supported for conversion")
+
         mat = new_matrix(width, height)
         data = np_array.astype(np.float64).flatten()
         mat.contents.data = data.ctypes.data_as(ctypes.POINTER(ctypes.c_double))
@@ -86,12 +92,12 @@ class Net:
     def add(self, layer):
         net_add_layer(self.network, layer)
 
-    def train(self, batch, labels, epochs, lr, batch_size, print_interval=100):
+    def train(self, batch, labels, epochs, lr, batch_size, print_interval=100, test_batch=None, test_labels=None):
         samples = len(batch)
         batch  = Net.batch_to_pointer(batch)
         labels = Net.batch_to_pointer(labels)
         net_train(self.network, self.loss_disp, batch, labels, samples, epochs, lr, print_interval, batch_size)
-        test_acc(self.network, batch, labels, samples, self.loss_disp)
+        test_acc(self.network, test_batch or batch, test_labels or labels, samples, self.loss_disp)
 
     @staticmethod
     def batch_to_pointer(batch):
