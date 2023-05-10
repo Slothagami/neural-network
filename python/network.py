@@ -134,8 +134,8 @@ SigmoidLayer.argtypes = []
 SigmoidLayer.restype = layer
 
 # Define Error Functions
-mse = DispErrorFunc.in_dll(lib, "mse")
-mse_grad = LossFunc.in_dll(lib, "mse_grad")
+mse = lib.mse
+mse_grad = lib.mse_grad
 
-cce = DispErrorFunc.in_dll(lib, "cce")
-cce_grad = LossFunc.in_dll(lib, "cce_grad")
+cce = lib.cce
+cce_grad = lib.cce_grad
