@@ -5,7 +5,7 @@ print("Loading Data...")
 from keras.datasets import mnist
 from keras.utils import np_utils
 
-n_test = 4000
+n_test = 1000
 (train_batch, train_labels), (test_batch, test_labels) = mnist.load_data()
 
 # Reshape Data

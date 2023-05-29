@@ -4,6 +4,9 @@ A machine learning libary, made completely from scratch.
 <br></br>
 ### Issues
 - large datasets are loaded into memory all at once
+- optimisation
+    - reuse memory as much as possible (avoid alloc and dealloc ing memory)
+    - allocate memory outside of time critical operations
 
 <br></br>
 ### Upcoming Milestones

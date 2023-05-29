@@ -3,9 +3,12 @@
 #include <stdio.h>
 #include "../include/matrix.h"
 #include "../include/nn.h"
+#include <time.h>
 
 // Network //
 void net_train(Network* net, DispErrorFunc errorFunc, mat** batch, mat** labels, int samples, int epochs, double lr, int interval, int batch_size) {   
+    int start_time = clock();
+    
     mat* result;
     double error_sum;
     for(int epoch = 0; epoch < epochs; epoch++) {
@@ -24,6 +27,8 @@ void net_train(Network* net, DispErrorFunc errorFunc, mat** batch, mat** labels,
     }
     net_update(net); // update for the last batch
 	mfree(result);
+
+    printf("Training time: %.2fs.\n", (double) (clock() - start_time) / CLOCKS_PER_SEC);
 }
 void net_update(Network* net) {
     for(int i = 0; i < net -> num_layers; i++) {
