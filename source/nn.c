@@ -5,7 +5,7 @@
 #include "../include/nn.h"
 
 // Network //
-void net_train(Network* net, DispErrorFunc errorFunc, mat** batch, mat** labels, int samples, int epochs, double lr, int interval, int batch_size) {
+void net_train(Network* net, DispErrorFunc errorFunc, mat** batch, mat** labels, int samples, int epochs, double lr, int interval, int batch_size) {   
     mat* result;
     double error_sum;
     for(int epoch = 0; epoch < epochs; epoch++) {
@@ -123,6 +123,7 @@ void net_backward(Network* net, mat* x, mat* output, mat* target, LossFunc loss,
 void layer_update(Layer* layer) {
     if(layer -> delta_weights == NULL) return;
     if(layer -> delta_biases  == NULL) return;
+    if(layer -> delta_n == 0) return; // avoid divide by zero making EVERYTHING nan
 
     // add everage of delta_weights to weights
     mat* avg_w = mscalediv(layer -> delta_weights, layer -> delta_n);
@@ -301,7 +302,7 @@ mat* mse_grad(mat* target, mat* pred) {
 }
 double mse(mat* target, mat* pred) {
     // mean((target - pred)^2)
-    mat* diff = msub(pred, target);
+    mat* diff   = msub(pred, target);
     mat* square = mmult(diff, diff);
 
     double sum = 0;

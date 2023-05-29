@@ -100,7 +100,7 @@ class Net:
         if test_batch is not None and test_labels is not None:
             test_batch  = Net.batch_to_pointer(test_batch)
             test_labels = Net.batch_to_pointer(test_labels)
-            
+
         net_train(self.network, self.loss_disp, batch, labels, samples, epochs, lr, print_interval, batch_size)
         test_acc(self.network, test_batch or batch, test_labels or labels, samples, self.loss_disp)
 

@@ -20,7 +20,6 @@ test_labels  = np_utils.to_categorical(test_labels )[:n_test]
 print("Data Loaded.")
 
 nn = Net(mse_grad, mse)
-
 nn.add(FCLayer(28**2, 100))
 nn.add(TanhLayer())
 nn.add(FCLayer(100, 50))
