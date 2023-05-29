@@ -172,7 +172,7 @@ void test_acc(Network* net, mat** inputs, mat** labels, int nsamples, DispErrorF
         mfree(pred);
     }
 
-    float acc = 100 * correct / nsamples;
+    float acc = 100 * (float) correct / nsamples;
     float avg_loss = total_loss / nsamples;
     printf("\nAccuracy: %.1f%% (%d/%d)\n", acc, correct, nsamples);
     printf("Test Loss: %.10f\n", avg_loss);
