@@ -183,6 +183,7 @@ mat* mscale(double scale, mat* matrix) {
     return scaled;
 }
 mat* mscalediv(mat* matrix, double divideby) {
+    if(divideby == 0) printf("Warning: Divide by zero in mscalediv()");
     return mscale(1/divideby, matrix);
 }
 mat* mscaleadd(double scale, mat* matrix) {
