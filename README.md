@@ -2,8 +2,12 @@
 A machine learning libary, made completely from scratch.
 
 <br></br>
+### Issues
+- large datasets are loaded into memory all at once
+
+<br></br>
 ### Upcoming Milestones
-- Mnist proficient
+- C Remake
     - convolutional layers
     - reshape layer
     - pooling layer

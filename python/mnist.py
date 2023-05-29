@@ -5,7 +5,7 @@ print("Loading Data...")
 from keras.datasets import mnist
 from keras.utils import np_utils
 
-n_test = 1000
+n_test = 4000
 (train_batch, train_labels), (test_batch, test_labels) = mnist.load_data()
 
 # Reshape Data
@@ -27,5 +27,4 @@ nn.add(TanhLayer())
 nn.add(FCLayer(50, 10))
 
 nn.train(train_batch, train_labels, 5, .001, 1, 1, test_batch, test_labels)
-
-# # Gets ~80% acc w/ 5 epochs
+# Gets ~98% acc w/ 5 epochs, lr=.001 and n_test = 4000
