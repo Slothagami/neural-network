@@ -1,4 +1,4 @@
-from network import *
+from network  import *
 from datasets import mnist_fc
 
 mnist = mnist_fc(1000)
@@ -11,4 +11,3 @@ nn.add(TanhLayer())
 nn.add(FCLayer(50, 10))
 
 nn.train(mnist, 5, .1, 100, 1)
-# Gets ~98% acc w/ 5 epochs, lr=.001 and n_test = 4000
