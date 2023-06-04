@@ -80,7 +80,7 @@ void printm(mat* matrix) {
         printf("[");
 		for(unsigned int x = 0; x < matrix -> width; x++){
         	// change print precision, global var?
-    		printf("%.4f ", matrix -> data[matrix -> width * y + x]);
+    		printf("%.2f ", matrix -> data[matrix -> width * y + x]);
     	}
         printf("]\n");
     }
