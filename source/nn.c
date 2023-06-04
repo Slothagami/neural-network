@@ -8,6 +8,8 @@
 // Network //
 void net_train(Network* net, DispErrorFunc errorFunc, mat** batch, mat** labels, int samples, int epochs, double lr, int interval, int batch_size) {   
     int start_time = clock();
+
+    printm(batch[0]);
     
     mat* result;
     double error_sum;

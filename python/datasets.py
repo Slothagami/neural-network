@@ -1,5 +1,18 @@
 from keras.datasets import mnist
 from keras.utils import np_utils
+import numpy as np
+
+def random_order(train, test):
+    (train_batch, train_labels), (test_batch, test_labels) = train, test 
+
+    index = np.random.permutation(train_batch.shape[0])
+
+    train_batch  = train_batch[index, :]
+    train_labels = train_labels[index, :]
+    test_batch   = test_batch[index, :]
+    test_labels  = test_labels[index, :]
+
+    return (train_batch, train_labels), (test_batch, test_labels)
 
 def mnist_fc(nsamples=1000):
     # load mnist, shaped for fully connected network
@@ -18,4 +31,4 @@ def mnist_fc(nsamples=1000):
     test_labels  = np_utils.to_categorical(test_labels )[:nsamples]
 
     print("Data Loaded.")
-    return train_batch, test_batch, train_labels, test_labels
+    return random_order((train_batch, train_labels), (test_batch, test_labels))

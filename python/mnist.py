@@ -1,7 +1,7 @@
 from network import *
 from datasets import mnist_fc
 
-train_batch, test_batch, train_labels, test_labels = mnist_fc(1000)
+(train_batch, train_labels), (test_batch, test_labels) = mnist_fc(1000)
 
 nn = Net(mse_grad, mse)
 nn.add(FCLayer(28**2, 100))
