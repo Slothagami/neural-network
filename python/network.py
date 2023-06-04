@@ -94,7 +94,7 @@ class Net:
 
     def train(self, training_data, epochs, lr, batch_size, print_interval=100):
         (batch, labels), (test_batch, test_labels) = training_data
-        samples = len(batch)
+        samples = batch.shape[0]
         batch  = Net.batch_to_pointer(batch)
         labels = Net.batch_to_pointer(labels)
 
