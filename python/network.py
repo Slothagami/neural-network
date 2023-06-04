@@ -92,7 +92,8 @@ class Net:
     def add(self, layer):
         net_add_layer(self.network, layer)
 
-    def train(self, batch, labels, epochs, lr, batch_size, print_interval=100, test_batch=None, test_labels=None):
+    def train(self, training_data, epochs, lr, batch_size, print_interval=100):
+        (batch, labels), (test_batch, test_labels) = training_data
         samples = len(batch)
         batch  = Net.batch_to_pointer(batch)
         labels = Net.batch_to_pointer(labels)
