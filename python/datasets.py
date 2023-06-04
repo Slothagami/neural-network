@@ -5,12 +5,13 @@ import numpy as np
 def random_order(train, test):
     (train_batch, train_labels), (test_batch, test_labels) = train, test 
 
-    index = np.random.permutation(train_batch.shape[0])
+    train_index = np.random.permutation(train_batch.shape[0])
+    test_index  = np.random.permutation(test_batch .shape[0])
 
-    train_batch  = train_batch[index, :]
-    train_labels = train_labels[index, :]
-    test_batch   = test_batch[index, :]
-    test_labels  = test_labels[index, :]
+    train_batch  = train_batch[train_index,  :]
+    train_labels = train_labels[train_index, :]
+    test_batch   = test_batch[test_index,  :]
+    test_labels  = test_labels[test_index, :]
 
     return (train_batch, train_labels), (test_batch, test_labels)
 
