@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title> Uncertainty Principle  </title>
+        <link rel="stylesheet" href="../style.css">
+
+        <script src="./js/multicanv.js"></script>
+        <script src="../import-colors.js"></script>
+        <script src="./js/uncertainty.js"></script>
+
+        <link rel="shortcut icon" type="image/x-icon" href="../favicon.ico?v=2">
+
+        <!-- Math rendering -->
+        <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+    </head>
+    <body>
+        <p id="date"> August 19, 2023 </p>
+        <h1> The Heisenberg Uncertainty Principle </h1>
+        <p>
+            In quantum mechanics, the properties of a particle are described using 
+            probability amplitude functions. The probability of a the particle taking 
+            a certain value is related to the output of the probability function at that value.
+        </p>
+        <p>
+            Here, we can see two probability functions, \( \color{#5492f0}{\psi(x)} \) and \( \color{#F09B24}{\psi(p)} \), 
+            representing probabilities for position (\(x\)) and momentum (\(p\)) respectively.
+        </p>
+         
+        <canvas id="real_part"></canvas>
+        <div id="real_part-controls">
+            <input type="range" id="real_part-spread" min=".13" max="8" step=".01" value="1" class="blue">
+        </div>
+
+        <p>
+            Because this function is complex valued, we are only plotting the real part of the wave here.
+            The following demo shows the related probabilities, making for a more intuitive example.
+        </p>
+
+        <canvas id="demo"></canvas>
+        <div id="demo-controls">
+            <input type="range" id="demo-spread" min=".01" max="1.7" step=".01" value="1" class="blue">
+        </div>
+
+        <p>
+            The essence of the uncertainty principle is the fact that, the more precicely you narrow down the position 
+            (represented by the width of possible values it could be), the less precicely you know its momentum. That is 
+            if the probability of position is not spread out, the probabilities of different momentums must be, and vice versa.
+            In the extreme cases, where position has a 100% chance of being some exact value, the momentum nescecarily 
+            spreads out to have an equal probability of being <i>any value</i>. Conversely, if you know with 100% certainty
+            the momentum, the particle will have an equal chance to be found at <i>any location in the universe</i>.
+        </p>
+
+        <p>
+            An idea like this is very counterintuitive, and it begs the question of 
+            why something like this is true at all.
+        </p>
+        <p>
+            As we saw earlier, the probabilities of speed and momentum are represented with a wave.
+            The key idea is the relationship between the two waves for position and momentum.
+            To get an idea of how they are related, consider the following experiment.
+        </p>
+
+        <p>
+            You have a stationary wave, say a bent piece of wire on a table.
+            Imagine you can only see the part of the wave directly in front of you.
+            To get an idea of its frequency, you could "scan" the wave by walking 
+            past it, recording what you see as you move over time.
+        </p>
+
+        <canvas id="relative_freq"></canvas>
+        <div id="relative_freq-controls">
+            <input type="range" id="relative_freq-speed" min=".3" max="1.8" step=".01" value="1.8">
+        </div>
+
+        <p>
+            The faster you walk past it,
+            the higher the frequency appears to be. In General, the 
+            frequency you see depends on the relative motion between you 
+            and the wave.
+        </p>
+        <p>
+            Its motion is therefore encoded in the frequency you observe. 
+            Meaning momentum, a measure of movement, is proportional
+            to the frequency of this wave.
+        </p>
+        <p>
+            The final piece of this effect is to explain why the waves related in this way 
+            produce this effect. That I leave to 3Blue1Brown in this clip from his video 
+            (worth watching on its own as well). In this analogy the "time" is the width of 
+            our piece of wire on the table. and as we saw, the frequency we percieve is the momentum.
+        </p>
+
+        <div class="video-container space-under">
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/MBnnXbOM5S4?start=62&end=129" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+        </div>
+    </body>
+</html>
